@@ -99,14 +99,17 @@ body {
     gap: 8px;
     margin-top: 16px;
     font-size: 14px;
-    color: #0077ff;
+    color: #fff;
+    background: #0077ff;
     text-decoration: none;
     font-weight: 500;
-    transition: opacity 0.2s;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background 0.2s;
 }
 
 .hero-resume:hover {
-    opacity: 0.7;
+    background: #0066dd;
 }
 /* ===== Шапка ===== */
 header {
