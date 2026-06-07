@@ -73,6 +73,7 @@ body {
 }
 
 /* ===== Hero ===== */
+
 .hero {
     max-width: 1100px;
     margin: 0 auto;
@@ -88,10 +89,25 @@ body {
 
 .hero-title {
     font-size: 20px;
-    color: #0077ff;
+    color: #444;
     font-weight: 500;
 }
 
+.hero-resume {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    font-size: 14px;
+    color: #0077ff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.hero-resume:hover {
+    opacity: 0.7;
+}
 /* ===== Шапка ===== */
 header {
     display: flex;
