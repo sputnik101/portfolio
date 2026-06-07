@@ -406,13 +406,70 @@ header {
 .site-footer-inner {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 24px 40px;
+    padding: 32px 40px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
 }
 
-.site-footer p {
-    font-size: 14px;
+/* Статус */
+.footer-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     color: #ccc;
+    font-size: 14px;
+}
+
+.footer-status-dot {
+    width: 8px;
+    height: 8px;
+    background: #4caf50;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Мини-навигация */
+.footer-nav {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-nav a {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.footer-nav a:hover {
+    color: #fff;
+}
+
+/* Соцсети */
+.footer-social {
+    display: flex;
+    gap: 16px;
+}
+
+.footer-social-link {
+    color: #ccc;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-social-link:hover {
+    color: #fff;
+}
+
+/* Копирайт */
+.footer-copy {
+    font-size: 13px;
+    color: #999;
 }
 
 /* ===== Адаптив ===== */
@@ -483,6 +540,12 @@ header {
     }
 
     .site-footer-inner {
-        padding: 20px 24px;
+        padding: 24px 24px;
+    }
+
+    .footer-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
     }
 }
