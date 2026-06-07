@@ -397,6 +397,24 @@ header {
     color: #0077ff;
 }
 
+/* ===== Footer ===== */
+.site-footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    margin-top: 40px;
+}
+
+.site-footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 40px;
+    text-align: center;
+}
+
+.site-footer p {
+    font-size: 14px;
+    color: #888;
+}
+
 /* ===== Адаптив ===== */
 @media (max-width: 700px) {
     .main-nav-inner {
@@ -462,5 +480,9 @@ header {
 
     .contacts-list {
         max-width: 100%;
+    }
+
+    .site-footer-inner {
+        padding: 20px 24px;
     }
 }
