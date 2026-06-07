@@ -12,6 +12,11 @@ window.addEventListener('scroll', () => {
         }
     });
 
+    // Если доскроллили до конца страницы — включаем последнюю секцию
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 10) {
+        current = sections[sections.length - 1].getAttribute('id');
+    }
+
     navLinks.forEach(link => {
         link.classList.remove('active');
         if (link.getAttribute('href') === `#${current}`) {
