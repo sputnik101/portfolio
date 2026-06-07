@@ -1,0 +1,466 @@
+/* ===== Сброс ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 70px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.5;
+    color: #222;
+    background: #fff;
+}
+
+/* ===== Sticky-меню ===== */
+.main-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.main-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 40px;
+}
+
+.main-nav ul {
+    display: flex;
+    list-style: none;
+    gap: 24px;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: #222;
+    font-weight: 500;
+    padding: 8px 0;
+    transition: color 0.2s;
+    position: relative;
+}
+
+.main-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #0077ff;
+    transition: width 0.2s;
+}
+
+.main-nav a:hover::after,
+.main-nav a.active::after {
+    width: 100%;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+    color: #0077ff;
+}
+
+/* ===== Hero ===== */
+.hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 40px 0;
+}
+
+.hero h1 {
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+}
+
+.hero-title {
+    font-size: 20px;
+    color: #0077ff;
+    font-weight: 500;
+}
+
+/* ===== Шапка ===== */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 40px;
+    gap: 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* ===== Левая колонка ===== */
+.header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    flex: 1;
+    max-width: 550px;
+}
+
+/* ===== Обо мне ===== */
+.about h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.about p {
+    color: #444;
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+
+.about p:last-child {
+    margin-bottom: 0;
+}
+
+.about h3 {
+    font-size: 18px;
+    margin: 24px 0 10px;
+}
+
+.about-interests {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+}
+
+.about-interests li {
+    padding: 4px 0 4px 20px;
+    position: relative;
+    color: #444;
+}
+
+.about-interests li::before {
+    content: '•';
+    position: absolute;
+    left: 4px;
+    color: #0077ff;
+    font-weight: bold;
+}
+
+/* ===== Правая колонка ===== */
+.header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+    padding-top: 4px;
+}
+
+/* ===== Фото ===== */
+.header-photo {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 20%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== Программы ===== */
+.skills h2 {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.skills ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    max-width: 180px;
+}
+
+.skills li {
+    background: #f0f4f8;
+    padding: 5px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    color: #333;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.skills li:hover {
+    background: #e0e8f0;
+    transform: translateY(-1px);
+}
+
+/* ===== Портфолио ===== */
+.portfolio {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 40px;
+}
+
+.portfolio h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.portfolio-subtitle {
+    color: #888;
+    margin-bottom: 40px;
+    font-size: 16px;
+}
+
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 32px;
+}
+
+.portfolio-card {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.portfolio-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.portfolio-image {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #f0f4f8;
+}
+
+.portfolio-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+}
+
+.portfolio-card:hover .portfolio-image img {
+    transform: scale(1.03);
+}
+
+.portfolio-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 119, 255, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.portfolio-card:hover .portfolio-overlay {
+    opacity: 1;
+}
+
+.portfolio-overlay a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 24px;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.portfolio-overlay a:hover {
+    background: #fff;
+    color: #0077ff;
+}
+
+.portfolio-info {
+    padding: 20px;
+}
+
+.portfolio-info h3 {
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.portfolio-info p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.portfolio-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.portfolio-tags span {
+    background: #f0f4f8;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: #555;
+}
+
+/* ===== Контакты ===== */
+.contacts {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 40px;
+}
+
+.contacts h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.contacts-subtitle {
+    color: #888;
+    margin-bottom: 40px;
+    font-size: 16px;
+}
+
+.contacts-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 420px;
+}
+
+.contacts-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.contacts-item:hover {
+    background: #f0f4f8;
+    transform: translateY(-1px);
+}
+
+.contacts-icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    color: #0077ff;
+}
+
+.contacts-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.contacts-label {
+    font-size: 13px;
+    color: #888;
+}
+
+.contacts-link {
+    font-size: 16px;
+    font-weight: 500;
+    color: #222;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.contacts-link:hover {
+    color: #0077ff;
+}
+
+/* ===== Адаптив ===== */
+@media (max-width: 700px) {
+    .main-nav-inner {
+        padding: 12px 24px;
+    }
+
+    .main-nav ul {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .hero {
+        padding: 32px 24px 0;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .hero-title {
+        font-size: 18px;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: center;
+        padding: 32px 24px;
+        gap: 32px;
+    }
+
+    .header-left {
+        order: 2;
+        max-width: 100%;
+    }
+
+    .header-right {
+        order: 1;
+    }
+
+    .portfolio {
+        padding: 40px 24px;
+    }
+
+    .portfolio-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .portfolio-overlay {
+        opacity: 1;
+        background: rgba(0, 119, 255, 0.6);
+    }
+
+    .portfolio-overlay a {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .contacts {
+        padding: 40px 24px;
+    }
+
+    .contacts-list {
+        max-width: 100%;
+    }
+}
