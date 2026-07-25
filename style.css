@@ -568,3 +568,27 @@ header {
         gap: 16px;
     }
 }
+.portfolio-label {
+    font-weight: 600;
+    color: #333;
+    display: inline;
+}
+
+.portfolio-role,
+.portfolio-task,
+.portfolio-solution,
+.portfolio-result {
+    margin-bottom: 0.4em;
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: #444;
+}
+
+.portfolio-result {
+    color: #2a7d2a; /* зелёный оттенок для результата — выделяет успех */
+    font-weight: 500;
+}
+
+.portfolio-tags {
+    margin-top: 1em;
+}
