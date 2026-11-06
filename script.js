@@ -1,25 +1,67 @@
-// ===== Живая схема города на первом экране =====
-// Кольца и радиальные магистрали в духе Москвы, река, мелкие улицы.
-// Дороги подкрашены по загруженности, по ним едут машины: в пробках медленнее.
+// ===== Меню =====
+(() => {
+    const toggle = document.querySelector('.menu-toggle');
+    const panel = document.querySelector('.menu-panel');
+    if (!toggle || !panel) return;
+
+    const setMenu = open => {
+        toggle.setAttribute('aria-expanded', String(open));
+        panel.hidden = !open;
+    };
+
+    toggle.addEventListener('click', () => setMenu(panel.hidden));
+    panel.addEventListener('click', event => {
+        if (event.target.closest('a')) setMenu(false);
+    });
+    document.addEventListener('click', event => {
+        if (!event.target.closest('.menu')) setMenu(false);
+    });
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && !panel.hidden) {
+            setMenu(false);
+            toggle.focus();
+        }
+    });
+})();
+
+// ===== Живая схема города с ускоренными сутками =====
+// Сутки идут быстрее: 1 секунда = 6 минут, весь день примерно за 4 минуты.
+// Старт — с текущего московского времени. В часы пик дороги краснеют, ночью пустеют.
+// Это имитация, а не реальные данные: дороги нарисованы «по мотивам» Москвы.
 (() => {
     const canvas = document.querySelector('.map');
+    const anchor = document.querySelector('.here-pin');
     if (!canvas || !canvas.getContext) return;
 
     const ctx = canvas.getContext('2d');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const COLORS = { free: '#3DD68C', slow: '#FFC14A', jam: '#FF5E5E' };
-    const SPEED = { free: 1.4, slow: 0.6, jam: 0.18 };
+    const BG = [108, 112, 247];                 // сиреневый фон первого экрана
+    const COLORS = { free: '#D4F56A', slow: '#FFB36B', jam: '#FF9EC8' };
+    const SPEED = { free: 1.3, slow: 0.55, jam: 0.15 };
+    const SIM_MINUTES_PER_SECOND = 6;
+
+    const clockEl = document.querySelector('.sim-clock');
+    const phaseEl = document.querySelector('.sim-phase');
+    const pauseBtn = document.querySelector('.sim-pause');
 
     let W = 0;
     let H = 0;
     let dpr = 1;
     let roads = [];
     let cars = [];
-    let base = null;      // заранее отрисованный слой с дорогами
+    let ground = null;     // фон, мелкие улицы, река
+    let veil = null;       // растворение к краям
+    let roadsLayer = null; // дороги с текущей загруженностью
     let running = false;
     let visible = true;
+    let paused = false;
 
-    // предсказуемый генератор случайных чисел: карта одинаковая при каждой загрузке
+    // текущие московские минуты от начала суток (UTC+3)
+    const now = new Date();
+    let simMinutes = ((now.getUTCHours() + 3) % 24) * 60 + now.getUTCMinutes();
+    let lastTick = 0;
+    let lastRoadsMinute = -999;
+
     function random(seed) {
         return () => {
             seed = (seed * 16807) % 2147483647;
@@ -27,7 +69,24 @@
         };
     }
 
-    function makeRoad(points, width, rand) {
+    const bell = (x, mu, sigma) => Math.exp(-((x - mu) ** 2) / (2 * sigma * sigma));
+
+    // загруженность города от 0 до 1 в зависимости от часа
+    function intensity(hour) {
+        const h = ((hour % 24) + 24) % 24;
+        const wrapped = (mu, s) => Math.max(bell(h, mu, s), bell(h + 24, mu, s), bell(h - 24, mu, s));
+        return Math.min(1, 0.12 + 0.85 * wrapped(8.8, 1.2) + 0.95 * wrapped(18.6, 1.5) + 0.32 * wrapped(13.5, 2.8));
+    }
+
+    function phase(hour) {
+        if (hour >= 7 && hour < 10.5) return 'утренний час пик';
+        if (hour >= 10.5 && hour < 16.5) return 'день';
+        if (hour >= 16.5 && hour < 20.5) return 'вечерний час пик';
+        if (hour >= 20.5 && hour < 23.5) return 'вечер';
+        return 'ночь';
+    }
+
+    function makeRoad(points, width, rand, kind) {
         const cum = [0];
         for (let i = 1; i < points.length; i++) {
             const [x1, y1] = points[i - 1];
@@ -36,12 +95,32 @@
         }
         const o1 = rand() * 10;
         const o2 = rand() * 10;
-        const levels = [];
+        // постоянная «склонность к пробкам» каждого участка
+        const base = [];
         for (let i = 0; i < points.length - 1; i++) {
-            const v = 0.5 + 0.32 * Math.sin(i * 0.23 + o1) + 0.24 * Math.sin(i * 0.071 + o2);
-            levels.push(v > 0.86 ? 'jam' : v > 0.62 ? 'slow' : 'free');
+            base.push(0.5 + 0.32 * Math.sin(i * 0.23 + o1) + 0.24 * Math.sin(i * 0.071 + o2));
         }
-        return { points, cum, len: cum[cum.length - 1], width, levels };
+        return { points, cum, len: cum[cum.length - 1], width, kind, base, levels: base.map(() => 'free') };
+    }
+
+    // пересчитать уровни загруженности под текущее время
+    function updateLevels(hour) {
+        const I = intensity(hour);
+        const morning = bell(hour, 8.8, 1.4);
+        const evening = bell(hour, 18.6, 1.6);
+        roads.forEach(road => {
+            const n = road.base.length;
+            for (let i = 0; i < n; i++) {
+                let v = road.base[i] * 0.7 + I * 0.5 - 0.16;
+                if (road.kind === 'radial') {
+                    // утром тяжелее ближе к центру (едут в город), вечером на выезде
+                    const t = i / n;
+                    v += 0.14 * morning * (1 - t) + 0.14 * evening * t - 0.06;
+                }
+                if (road.kind === 'ring-mid') v += 0.08 * I;
+                road.levels[i] = v > 0.86 ? 'jam' : v > 0.62 ? 'slow' : 'free';
+            }
+        });
     }
 
     function pointAt(road, s) {
@@ -58,6 +137,19 @@
         return [x1 + (x2 - x1) * t, y1 + (y2 - y1) * t, lo];
     }
 
+    function layer() {
+        const c = document.createElement('canvas');
+        c.width = canvas.width;
+        c.height = canvas.height;
+        const g = c.getContext('2d');
+        g.scale(dpr, dpr);
+        g.lineCap = 'round';
+        g.lineJoin = 'round';
+        return [c, g];
+    }
+
+    const rgba = a => `rgba(${BG[0]}, ${BG[1]}, ${BG[2]}, ${a})`;
+
     function build() {
         dpr = Math.min(window.devicePixelRatio || 1, 2);
         W = canvas.clientWidth;
@@ -66,19 +158,17 @@
         canvas.width = Math.round(W * dpr);
         canvas.height = Math.round(H * dpr);
 
-        const narrow = W < 900;
-        const cx = narrow ? W * 0.55 : W * 0.6;
-        const cy = narrow ? H * 0.2 : H * 0.44;
-        const R = Math.max(W, H) * (narrow ? 0.8 : 0.6);
-        const sx = 1.08;
-        const sy = 0.92;
+        const hostRect = canvas.getBoundingClientRect();
+        const anchorRect = anchor ? anchor.getBoundingClientRect() : null;
+        const hasAnchor = anchorRect && anchorRect.width > 0;
+        const cx = hasAnchor ? anchorRect.left + anchorRect.width / 2 - hostRect.left : W / 2;
+        const cy = hasAnchor ? anchorRect.top + 9 - hostRect.top : Math.min(H * 0.4, 250);
+        const R = Math.max(W, H) * (W < 900 ? 0.75 : 0.55);
         const rand = random(11);
-        const at = (a, r) => [cx + Math.cos(a) * r * sx, cy + Math.sin(a) * r * sy];
+        const at = (a, r) => [cx + Math.cos(a) * r * 1.08, cy + Math.sin(a) * r * 0.92];
 
         roads = [];
-
-        // кольца: от Бульварного до МКАД
-        [[0.07, 3], [0.14, 4], [0.27, 5], [0.5, 4], [0.95, 6]].forEach(([f, w]) => {
+        [[0.09, 2, 'ring'], [0.17, 3, 'ring-mid'], [0.3, 3.5, 'ring-mid'], [0.52, 3, 'ring'], [0.95, 4, 'ring']].forEach(([f, w, kind]) => {
             const p1 = rand() * 6;
             const p2 = rand() * 6;
             const pts = [];
@@ -86,148 +176,193 @@
                 const a = (i / 200) * Math.PI * 2;
                 pts.push(at(a, f * R * (1 + 0.05 * Math.sin(3 * a + p1) + 0.03 * Math.sin(5 * a + p2))));
             }
-            roads.push(makeRoad(pts, w, rand));
+            roads.push(makeRoad(pts, w, rand, kind));
         });
 
-        // радиальные магистрали
-        const count = 13;
-        for (let i = 0; i < count; i++) {
-            const a0 = (i / count) * Math.PI * 2 + rand() * 0.2;
+        for (let i = 0; i < 13; i++) {
+            const a0 = (i / 13) * Math.PI * 2 + rand() * 0.2;
             const bend = (rand() - 0.5) * 0.4;
             const pts = [];
             for (let j = 0; j <= 60; j++) {
                 const t = j / 60;
-                pts.push(at(a0 + bend * t * t, (0.07 + t * 1.25) * R));
+                pts.push(at(a0 + bend * t * t, (0.09 + t * 1.25) * R));
             }
-            roads.push(makeRoad(pts, 3 + Math.round(rand() * 2), rand));
+            roads.push(makeRoad(pts, 2 + Math.round(rand() * 1.5), rand, 'radial'));
         }
 
-        // фон: заливка, мелкие улицы, река, дороги с загруженностью
-        base = document.createElement('canvas');
-        base.width = canvas.width;
-        base.height = canvas.height;
-        const b = base.getContext('2d');
-        b.scale(dpr, dpr);
-
-        b.fillStyle = '#0E1430';
-        b.fillRect(0, 0, W, H);
-
-        b.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-        b.lineWidth = 1;
-        b.beginPath();
+        // фон, улицы, река
+        let g;
+        [ground, g] = layer();
+        g.fillStyle = rgba(1);
+        g.fillRect(0, 0, W, H);
+        g.strokeStyle = 'rgba(255, 255, 255, 0.10)';
+        g.lineWidth = 1;
+        g.beginPath();
         for (let i = 0; i < 1100; i++) {
             const a = rand() * Math.PI * 2;
-            const r = (0.04 + Math.sqrt(rand()) * 1.3) * R;
+            const r = (0.05 + Math.sqrt(rand()) * 1.3) * R;
             const [x, y] = at(a, r);
             const dir = rand() < 0.5 ? a : a + Math.PI / 2;
             const len = 10 + rand() * 44;
-            b.moveTo(x, y);
-            b.lineTo(x + Math.cos(dir) * len, y + Math.sin(dir) * len);
+            g.moveTo(x, y);
+            g.lineTo(x + Math.cos(dir) * len, y + Math.sin(dir) * len);
         }
-        b.stroke();
-
-        // река
-        b.strokeStyle = '#1A2858';
-        b.lineWidth = Math.max(10, R * 0.03);
-        b.lineCap = 'round';
-        b.lineJoin = 'round';
-        b.beginPath();
+        g.stroke();
+        g.strokeStyle = 'rgba(255, 255, 255, 0.16)';
+        g.lineWidth = Math.max(10, R * 0.03);
+        g.beginPath();
         for (let j = 0; j <= 80; j++) {
             const t = j / 80;
             const x = cx + (-1.4 + 2.8 * t) * R;
             const y = cy + R * (0.1 * Math.sin(t * 10) + 0.16 * Math.sin(t * 3.4 + 1));
-            if (j === 0) b.moveTo(x, y); else b.lineTo(x, y);
+            if (j === 0) g.moveTo(x, y); else g.lineTo(x, y);
         }
-        b.stroke();
+        g.stroke();
 
-        roads.forEach(road => {
-            b.strokeStyle = '#26305E';
-            b.lineWidth = road.width + 3;
-            b.beginPath();
-            road.points.forEach(([x, y], i) => (i ? b.lineTo(x, y) : b.moveTo(x, y)));
-            b.stroke();
+        // растворение к краям и к низу
+        [veil, g] = layer();
+        const fade = g.createRadialGradient(cx, cy, R * 0.18, cx, cy, Math.max(W, H) * 0.62);
+        fade.addColorStop(0, rgba(0));
+        fade.addColorStop(1, rgba(0.9));
+        g.fillStyle = fade;
+        g.fillRect(0, 0, W, H);
+        const bottom = g.createLinearGradient(0, H * 0.55, 0, H);
+        bottom.addColorStop(0, rgba(0));
+        bottom.addColorStop(0.7, rgba(0.85));
+        bottom.addColorStop(1, rgba(1));
+        g.fillStyle = bottom;
+        g.fillRect(0, 0, W, H);
 
-            // участки одного уровня загруженности рисуем одной линией
-            let start = 0;
-            for (let i = 1; i <= road.levels.length; i++) {
-                if (i === road.levels.length || road.levels[i] !== road.levels[start]) {
-                    b.strokeStyle = COLORS[road.levels[start]];
-                    b.globalAlpha = 0.55;
-                    b.lineWidth = road.width;
-                    b.beginPath();
-                    for (let k = start; k <= i; k++) {
-                        const [x, y] = road.points[k];
-                        if (k === start) b.moveTo(x, y); else b.lineTo(x, y);
-                    }
-                    b.stroke();
-                    start = i;
-                }
-            }
-            b.globalAlpha = 1;
-        });
+        [roadsLayer] = layer();
 
-        // затемнение по краям и слева, чтобы текст на панелях читался
-        const v = b.createRadialGradient(cx, cy, R * 0.2, cx, cy, Math.max(W, H));
-        v.addColorStop(0, 'rgba(14, 20, 48, 0)');
-        v.addColorStop(1, 'rgba(14, 20, 48, 0.75)');
-        b.fillStyle = v;
-        b.fillRect(0, 0, W, H);
-
-        if (!narrow) {
-            const l = b.createLinearGradient(0, 0, W * 0.55, 0);
-            l.addColorStop(0, 'rgba(14, 20, 48, 0.55)');
-            l.addColorStop(1, 'rgba(14, 20, 48, 0)');
-            b.fillStyle = l;
-            b.fillRect(0, 0, W, H);
-        }
-
-        // машины
         cars = [];
-        const total = narrow ? 140 : 260;
+        const total = W < 900 ? 130 : 230;
         for (let i = 0; i < total; i++) {
             const road = roads[Math.floor(rand() * roads.length)];
-            cars.push({ road, s: rand() * road.len, dir: rand() < 0.5 ? 1 : -1 });
+            cars.push({ road, s: rand() * road.len, dir: rand() < 0.5 ? 1 : -1, rank: rand() });
         }
 
+        lastRoadsMinute = -999;
+        refreshRoads(true);
         draw(false);
     }
 
-    function draw(move) {
-        if (!base) return;
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.drawImage(base, 0, 0);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        ctx.fillStyle = 'rgba(238, 240, 250, 0.9)';
-        ctx.beginPath();
-        cars.forEach(car => {
-            if (move) {
-                const level = car.road.levels[pointAt(car.road, car.s)[2]];
-                car.s += SPEED[level] * car.dir;
-                if (car.s < 0) car.s += car.road.len;
-                if (car.s > car.road.len) car.s -= car.road.len;
+    // перерисовать дороги, если время заметно сдвинулось
+    function refreshRoads(force) {
+        if (!force && Math.abs(simMinutes - lastRoadsMinute) < 3) return;
+        lastRoadsMinute = simMinutes;
+        updateLevels(simMinutes / 60);
+
+        const g = roadsLayer.getContext('2d');
+        g.setTransform(1, 0, 0, 1, 0, 0);
+        g.clearRect(0, 0, roadsLayer.width, roadsLayer.height);
+        g.setTransform(dpr, 0, 0, dpr, 0, 0);
+        g.lineCap = 'round';
+        g.lineJoin = 'round';
+
+        roads.forEach(road => {
+            g.strokeStyle = 'rgba(255, 255, 255, 0.22)';
+            g.lineWidth = road.width + 3;
+            g.beginPath();
+            road.points.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y)));
+            g.stroke();
+
+            let start = 0;
+            for (let i = 1; i <= road.levels.length; i++) {
+                if (i === road.levels.length || road.levels[i] !== road.levels[start]) {
+                    g.strokeStyle = COLORS[road.levels[start]];
+                    g.lineWidth = road.width;
+                    g.beginPath();
+                    for (let k = start; k <= i; k++) {
+                        const [x, y] = road.points[k];
+                        if (k === start) g.moveTo(x, y); else g.lineTo(x, y);
+                    }
+                    g.stroke();
+                    start = i;
+                }
             }
-            const [x, y] = pointAt(car.road, car.s);
-            if (x < -10 || y < -10 || x > W + 10 || y > H + 10) return;
-            ctx.moveTo(x + 2.1, y);
-            ctx.arc(x, y, 2.1, 0, Math.PI * 2);
         });
-        ctx.fill();
+
+        updateClock();
     }
 
-    function loop() {
+    function updateClock() {
+        const total = Math.floor(simMinutes) % 1440;
+        const hh = String(Math.floor(total / 60)).padStart(2, '0');
+        const mm = String(total % 60).padStart(2, '0');
+        if (clockEl) clockEl.textContent = `${hh}:${mm}`;
+        if (phaseEl) phaseEl.textContent = phase(total / 60);
+    }
+
+    function draw(move) {
+        if (!ground) return;
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.drawImage(ground, 0, 0);
+        ctx.drawImage(roadsLayer, 0, 0);
+        ctx.drawImage(veil, 0, 0);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        // ночью на дорогах меньше машин
+        const share = 0.3 + 0.7 * intensity(simMinutes / 60);
+
+        ctx.fillStyle = '#FFFFFF';
+        for (const band of [0.9, 0.45]) {
+            ctx.globalAlpha = band;
+            ctx.beginPath();
+            cars.forEach(car => {
+                if (car.rank > share) return;
+                if (move && band === 0.9) {
+                    const level = car.road.levels[pointAt(car.road, car.s)[2]];
+                    car.s += SPEED[level] * car.dir;
+                    if (car.s < 0) car.s += car.road.len;
+                    if (car.s > car.road.len) car.s -= car.road.len;
+                }
+                const [x, y] = pointAt(car.road, car.s);
+                const near = y < H * 0.62 && x > W * 0.12 && x < W * 0.88;
+                if ((band === 0.9) !== near) return;
+                ctx.moveTo(x + 1.8, y);
+                ctx.arc(x, y, 1.8, 0, Math.PI * 2);
+            });
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+    }
+
+    function loop(time) {
         if (!running) return;
-        draw(true);
+        if (lastTick) {
+            const dt = Math.min(time - lastTick, 100) / 1000;
+            if (!paused) {
+                simMinutes = (simMinutes + dt * SIM_MINUTES_PER_SECOND) % 1440;
+                refreshRoads(false);
+            }
+        }
+        lastTick = time;
+        draw(!paused);
         requestAnimationFrame(loop);
     }
 
     function start() {
-        if (reduceMotion || running || !visible) return;
+        if (reduceMotion || running || !visible || document.hidden) return;
         running = true;
+        lastTick = 0;
         requestAnimationFrame(loop);
     }
 
     function stop() {
         running = false;
+    }
+
+    if (pauseBtn) {
+        if (reduceMotion) {
+            pauseBtn.hidden = true;
+        } else {
+            pauseBtn.addEventListener('click', () => {
+                paused = !paused;
+                pauseBtn.setAttribute('aria-pressed', String(paused));
+                pauseBtn.textContent = paused ? 'Продолжить' : 'Пауза';
+            });
+        }
     }
 
     build();
@@ -241,7 +376,6 @@
         }, 150);
     });
 
-    // не тратим ресурсы, когда карта за пределами экрана или вкладка скрыта
     if ('IntersectionObserver' in window) {
         new IntersectionObserver(entries => {
             visible = entries[0].isIntersecting;
