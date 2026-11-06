@@ -2,250 +2,245 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Щербаков Сергей — Senior UX/UI дизайнер (Product Designer)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Сергей Щербаков — продуктовый дизайнер</title>
+    <meta name="description" content="Сергей Щербаков, Senior UX/UI дизайнер. Сложные интерфейсы для финансового сектора и госсектора: ГИС, дизайн-системы, продуктовые метрики.">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 <body>
-    <!-- Sticky-меню -->
-    <nav class="main-nav" id="main-nav">
-        <div class="main-nav-inner">
-            <ul>
-                <li><a href="#about" class="active">Обо мне</a></li>
-                <li><a href="#portfolio">Портфолио</a></li>
-                <li><a href="#contacts">Контакты</a></li>
-            </ul>
-        </div>
-    </nav>
+    <main id="top">
 
-    <!-- Hero: имя и специализация -->
-    <section class="hero">
-        <h1>Щербаков Сергей</h1>
-        <p class="hero-title">Senior UX/UI Designer / Product Designer</p>
-        
-    </section>
+        <!-- Первый экран: живая схема города и панели интерфейса поверх неё -->
+        <section class="map-hero" aria-label="Сергей Щербаков, продуктовый дизайнер">
+            <canvas class="map" aria-hidden="true"></canvas>
 
-    <header>
-        <div class="header-left">
-            <section class="about" id="about">
-                <h2>Обо мне</h2>
+            <header class="panel panel-id">
+                <span class="avatar" aria-hidden="true">СЩ</span>
+                <div>
+                    <p class="id-name">Сергей Щербаков</p>
+                    <p class="id-role">Senior UX/UI дизайнер</p>
+                </div>
+                <p class="chip chip-free"><span class="dot" aria-hidden="true"></span>Открыт к предложениям</p>
+            </header>
 
-                <p>Senior UX/UI дизайнер. 4 года в продуктовом дизайне, 6 лет — в маркетинге и управлении. Проектирую сложные интерфейсы: от исследования до готовых макетов. Объединяю визуальную эстетику и бизнес-метрики — мои решения для СберСтрахования дали +15% к конверсии. Работаю в кросс-функциональных командах. Ищу продуктовые задачи, где важен не только UI, но и влияние на прибыль.</p>
-
-                <h3>Что мне интересно в работе:</h3>
-                <ul class="about-interests">
-                    <li>сложные проекты, где необходимо проявлять способности к анализу, а не просто отрисовать симпатичный интерфейс</li>
-                    <li>упрощать сложные и громоздкие интерфейсы для улучшения их восприятия пользователем</li>
-                    <li>проектирование интерфейсов с нуля</li>
-                    <li>возможность оценить эффективность проделанной работы</li>
-                </ul>
-
-            </section>
-        </div>
-
-        <div class="header-right">
-            <img src="img/iam.jpg" alt="Портрет Сергея Щербакова" class="header-photo">
-            <div class="skills">
-                <h2>Программы</h2>
-                <ul>
-                    <li>Figma</li>
-                    <li>Photoshop</li>
-                    <li>Illustrator</li>
-                    <li>Blender</li>
-                </ul>
-            </div>
-        </div>
-    </header>
-
-    <main>
-        <section class="portfolio" id="portfolio">
-            <h2>Портфолио</h2>
-            <p class="portfolio-subtitle">Избранные работы по UX/UI-дизайну</p>
-
-            <div class="portfolio-grid">
-
-                <article class="portfolio-card">
-    <div class="portfolio-image">
-        <img src="img/portfolio/logoSI.png" alt="СберСтрахование - Лендинги" loading="lazy">
-        <div class="portfolio-overlay">
-            <a href="https://www.figma.com/design/iVnCipO89ibohVVwhDVU9O/SberInsurance?node-id=4-58929&t=8I5qQPh7heg3QzkV-1" target="_blank" rel="noopener noreferrer">Смотреть макеты</a>
-        </div>
-    </div>
-    <div class="portfolio-info">
-        <h3>СберСтрахование</h3>
-        
-        <div class="portfolio-role">
-            <span class="portfolio-label">Роль:</span> Руководитель группы UX/UI
-        </div>
-        
-        <div class="portfolio-task">
-            <span class="portfolio-label">Задача:</span> Устаревший сайт, высокая доля отказов, отсутствие мобильной версии. Нужно было обновить продукт для B2B и B2C.
-        </div>
-        
-        <div class="portfolio-solution">
-            <span class="portfolio-label">Решение:</span> Полный редизайн desktop/mobile, новые интерфейсы калькуляторов, визуальная система для рекламных кампаний.
-        </div>
-        
-        <div class="portfolio-result">
-            <span class="portfolio-label">Результат:</span> +15% к конверсии ключевых продуктов. Снижение затрат на подрядчиков.
-        </div>
-        
-        <div class="portfolio-tags">
-            <span>Figma</span>
-            <span>Redesign</span>
-            <span>B2B</span>
-            <span>B2C</span>
-        </div>
-    </div>
-</article>
-
-                <article class="portfolio-card">
-    <div class="portfolio-image">
-        <img src="img/portfolio/VLlogo.png" alt="Разработка дизайна ИТС" loading="lazy">
-        <div class="portfolio-overlay">
-            <a href="https://www.figma.com/design/NIbmuJw8O9asFPpXjF39nE/%D0%92%D0%BE%D0%B9%D1%81-%D0%9B%D0%B8%D0%BD%D0%BA?node-id=69-334&t=eQVYKzlmxrWiBqaJ-1" target="_blank" rel="noopener noreferrer">Смотреть макеты</a>
-        </div>
-    </div>
-    <div class="portfolio-info">
-        <h3>ВойсЛинк</h3>
-        
-        <div class="portfolio-role">
-            <span class="portfolio-label">Роль:</span> Ведущий UX/UI-дизайнер
-        </div>
-        
-        <div class="portfolio-task">
-            <span class="portfolio-label">Задача:</span> Спроектировать интерфейс сложной B2G-системы с нуля и ускорить вывод продукта на рынок.
-        </div>
-        
-        <div class="portfolio-solution">
-            <span class="portfolio-label">Решение:</span> Создал визуальную концепцию продукта, которая легла в основу маркетинговых материалов. Разработал экранные формы, позволившие быстро запустить продукт.
-        </div>
-        
-        <div class="portfolio-result">
-            <span class="portfolio-label">Результат:</span> Ускорен вывод продукта на рынок. Сокращён цикл подготовки промо-материалов.
-        </div>
-        
-        <div class="portfolio-tags">
-            <span>Figma</span>
-            <span>Design</span>
-            <span>B2G</span>
-        </div>
-    </div>
-</article>
-
-                <article class="portfolio-card">
-    <div class="portfolio-image">
-        <img src="img/portfolio/FLL.png" alt="Freelance" loading="lazy">
-        <div class="portfolio-overlay">
-            <a href="https://www.figma.com/design/rB2tL3rSCTp4kgsamEe9Dk/Freelance?node-id=1-3142&t=pcoCMW6LA8TJE9wA-1" target="_blank" rel="noopener noreferrer">Смотреть макеты</a>
-        </div>
-    </div>
-    <div class="portfolio-info">
-        <h3>Частные проекты — UX/UI для B2C-продуктов</h3>
-        
-        <div class="portfolio-role">
-            <span class="portfolio-label">Роль:</span> UX/UI-дизайнер (фриланс)
-        </div>
-        
-        <div class="portfolio-task">
-            <span class="portfolio-label">Задача:</span> Разработка интерфейсов для B2C-продуктов под конкретные бизнес-задачи заказчиков.
-        </div>
-        
-        <div class="portfolio-solution">
-            <span class="portfolio-label">Решение:</span> Проектирование с нуля, адаптивный дизайн, передача готовых макетов в разработку.
-        </div>
-        
-        <div class="portfolio-result">
-            <span class="portfolio-label">Результат:</span> Соблюдение сроков. Макеты готовы к реализации без доработок.
-        </div>
-        
-        <div class="portfolio-tags">
-            <span>Figma</span>
-            <span>Freelance</span>
-            <span>B2C</span>
-        </div>
-    </div>
-</article>
-
-            </div>
-        </section>
-
-        <section class="contacts" id="contacts">
-            <h2>Контакты</h2>
-            <p class="contacts-subtitle">Свяжитесь со мной удобным способом</p>
-
-            <ul class="contacts-list">
-                <li class="contacts-item">
-                    <span class="contacts-icon" aria-hidden="true">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7294C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1469 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.19 12.85C3.49998 10.2412 2.44824 7.27099 2.12 4.18001C2.09501 3.90347 2.12788 3.62477 2.2165 3.36163C2.30513 3.0985 2.44757 2.85669 2.63477 2.65163C2.82196 2.44657 3.04982 2.28272 3.3038 2.17053C3.55778 2.05834 3.83234 2.00027 4.11 2.00001H7.11C7.59531 1.99523 8.06579 2.16709 8.43376 2.48354C8.80173 2.79999 9.04207 3.23946 9.11 3.72001C9.23662 4.68007 9.47145 5.62273 9.81 6.53001C9.94455 6.88793 9.97366 7.27692 9.8939 7.65089C9.81415 8.02485 9.62886 8.36812 9.36 8.64001L8.09 9.91001C9.51355 12.4136 11.5864 14.4865 14.09 15.91L15.36 14.64C15.6319 14.3711 15.9752 14.1859 16.3491 14.1061C16.7231 14.0263 17.1121 14.0555 17.47 14.19C18.3773 14.5286 19.3199 14.7634 20.28 14.89C20.7658 14.9585 21.2094 15.2032 21.5259 15.5772C21.8425 15.9512 22.0096 16.4286 22 16.92Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </span>
-                    <div class="contacts-info">
-                        <span class="contacts-label">Телефон</span>
-                        <a href="tel:+79680140400" class="contacts-link">+7 968 014 04 00</a>
-                    </div>
-                </li>
-
-                <li class="contacts-item">
-                    <span class="contacts-icon" aria-hidden="true">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 5L2 12.5L9 14.5M21 5L18.5 21L9 14.5M21 5L9 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </span>
-                    <div class="contacts-info">
-                        <span class="contacts-label">Telegram</span>
-                        <a href="https://t.me/ionizy" target="_blank" rel="noopener noreferrer" class="contacts-link">@ionizy</a>
-                    </div>
-                </li>
-
-                <li class="contacts-item">
-                    <span class="contacts-icon" aria-hidden="true">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </span>
-                    <div class="contacts-info">
-                        <span class="contacts-label">Email</span>
-                        <a href="mailto:ionizy@gmail.com" class="contacts-link">ionizy@gmail.com</a>
-                    </div>
-                </li>
-            </ul>
-        </section>
-    </main>
-
-            <footer class="site-footer">
-        <div class="site-footer-inner">
-            <div class="footer-status">
-                <span class="footer-status-dot"></span>
-                Открыт к проектам
-            </div>
-
-            <nav class="footer-nav">
+            <nav class="panel panel-layers" aria-label="Разделы">
+                <p class="panel-title">Слои</p>
+                <a href="#route">Путь</a>
+                <a href="#work">Работы</a>
                 <a href="#about">Обо мне</a>
-                <a href="#portfolio">Портфолио</a>
                 <a href="#contacts">Контакты</a>
             </nav>
 
-            <div class="footer-social">
-                <a href="https://t.me/ionizy" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="Telegram">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M21 5L2 12.5L9 14.5M21 5L18.5 21L9 14.5M21 5L9 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </a>
-                <a href="mailto:ionizy@gmail.com" class="footer-social-link" aria-label="Email">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </a>
+            <div class="panel panel-main">
+                <h1>Проектирую сложные интерфейсы так, чтобы ими было просто пользоваться</h1>
+                <p class="main-sub">Три года делал ГИС управления транспортными потоками города. До этого обновлял сайт и калькуляторы Сбер Страхования.</p>
+                <div class="actions">
+                    <a href="#work" class="btn btn-primary">Смотреть работы</a>
+                    <a href="portfolio.pdf" class="btn btn-ghost" target="_blank" rel="noopener noreferrer">PDF-версия</a>
+                </div>
             </div>
 
-            <p class="footer-copy">© 2026 Щербаков Сергей. Дизайн и разработка.</p>
-        </div>
-    </footer>
+            <aside class="panel panel-summary" aria-label="Коротко о результатах">
+                <p class="panel-title">Сводка</p>
+                <dl>
+                    <div class="metric">
+                        <dt>Конверсия ключевых продуктов, Сбер Страхование</dt>
+                        <dd>+15%</dd>
+                    </div>
+                    <div class="metric">
+                        <dt>Быстрее выходит каждый модуль ГИС</dt>
+                        <dd>1–1,5 мес.</dd>
+                    </div>
+                    <div class="metric">
+                        <dt>В продуктовом дизайне, до этого 6 лет в маркетинге</dt>
+                        <dd>4+ года</dd>
+                    </div>
+                </dl>
+            </aside>
+
+            <div class="map-meta" aria-hidden="true">
+                <div class="legend">
+                    <span><i class="lg lg-free"></i>свободно</span>
+                    <span><i class="lg lg-slow"></i>плотно</span>
+                    <span><i class="lg lg-jam"></i>пробка</span>
+                </div>
+                <p class="coords">55.7558° N, 37.6173° E · Москва</p>
+            </div>
+        </section>
+
+        <!-- Путь -->
+        <section class="section" id="route">
+            <div class="section-head">
+                <h2>Путь</h2>
+                <p>От рекламного креатива к сложным продуктам</p>
+            </div>
+
+            <ol class="route">
+                <li class="stop">
+                    <span class="stop-year">2015</span>
+                    <span class="stop-dot" aria-hidden="true"></span>
+                    <span class="stop-name">Маркетинг</span>
+                    <span class="stop-role">Рекламный креатив, сценарии и видео</span>
+                </li>
+                <li class="stop">
+                    <span class="stop-year">2021</span>
+                    <span class="stop-dot" aria-hidden="true"></span>
+                    <span class="stop-name">«Гудок»</span>
+                    <span class="stop-role">Руководитель отдела маркетинга и рекламы</span>
+                </li>
+                <li class="stop">
+                    <span class="stop-year">2022</span>
+                    <span class="stop-dot" aria-hidden="true"></span>
+                    <span class="stop-name">Сбер Страхование</span>
+                    <span class="stop-role">Руководитель группы UX/UI</span>
+                </li>
+                <li class="stop">
+                    <span class="stop-year">2023–2026</span>
+                    <span class="stop-dot" aria-hidden="true"></span>
+                    <span class="stop-name">ВойсЛинк</span>
+                    <span class="stop-role">Ведущий UX/UI-дизайнер</span>
+                </li>
+                <li class="stop stop-next">
+                    <span class="stop-year">Сейчас</span>
+                    <span class="stop-dot" aria-hidden="true"></span>
+                    <span class="stop-name">Ищу работу</span>
+                    <span class="stop-role">Senior UX/UI или продуктовый дизайнер, полная занятость</span>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Работы: карточки объектов, как в ГИС -->
+        <section class="section" id="work">
+            <div class="section-head">
+                <h2>Работы</h2>
+                <p>Макеты открываются в Figma</p>
+            </div>
+
+            <div class="objects">
+                <article class="object-card">
+                    <header class="oc-head">
+                        <span class="marker marker-sber" aria-hidden="true"></span>
+                        <h3>Сбер Страхование</h3>
+                        <span class="chip chip-light">B2C, B2B</span>
+                    </header>
+                    <a class="oc-cover cover-sber" href="https://www.figma.com/design/iVnCipO89ibohVVwhDVU9O/SberInsurance?node-id=4-58929&t=8I5qQPh7heg3QzkV-1" target="_blank" rel="noopener noreferrer" aria-label="Открыть макеты Сбер Страхования в Figma">
+                        <img src="img/portfolio/logoSI.png" alt="" loading="lazy" width="874" height="416">
+                    </a>
+                    <dl class="oc-props">
+                        <div><dt>Роль</dt><dd>Руководитель группы UX/UI из 2 человек</dd></div>
+                        <div><dt>Период</dt><dd>2022–2023</dd></div>
+                        <div><dt>Что сделал</dt><dd>Полный редизайн sberbankins.ru для desktop и mobile, калькуляторы страховых продуктов, интерфейсы мобильного приложения, визуальная система для рекламы</dd></div>
+                        <div class="oc-result"><dt>Результат</dt><dd>+15% к конверсии ключевых продуктов</dd></div>
+                    </dl>
+                    <a class="btn btn-outline" href="https://www.figma.com/design/iVnCipO89ibohVVwhDVU9O/SberInsurance?node-id=4-58929&t=8I5qQPh7heg3QzkV-1" target="_blank" rel="noopener noreferrer">Открыть макеты</a>
+                </article>
+
+                <article class="object-card">
+                    <header class="oc-head">
+                        <span class="marker marker-vl" aria-hidden="true"></span>
+                        <h3>ВойсЛинк</h3>
+                        <span class="chip chip-light">B2G</span>
+                    </header>
+                    <a class="oc-cover cover-vl" href="https://www.figma.com/design/NIbmuJw8O9asFPpXjF39nE/%D0%92%D0%BE%D0%B9%D1%81-%D0%9B%D0%B8%D0%BD%D0%BA?node-id=69-334&t=eQVYKzlmxrWiBqaJ-1" target="_blank" rel="noopener noreferrer" aria-label="Открыть макеты ВойсЛинк в Figma">
+                        <img src="img/portfolio/VLlogo.png" alt="" loading="lazy" width="874" height="416">
+                    </a>
+                    <dl class="oc-props">
+                        <div><dt>Роль</dt><dd>Ведущий UX/UI-дизайнер</dd></div>
+                        <div><dt>Период</dt><dd>2023–2026</dd></div>
+                        <div><dt>Что сделал</dt><dd>Переработал интерфейс ГИС управления транспортными потоками города для администраций, губернаторов и транспортных инженеров; создал дизайн-систему для дизайнеров и фронтенда</dd></div>
+                        <div class="oc-result"><dt>Результат</dt><dd>Каждый новый модуль выходит на 1–1,5 месяца быстрее</dd></div>
+                    </dl>
+                    <p class="oc-note">Детали под NDA, подробно расскажу на собеседовании.</p>
+                    <a class="btn btn-outline" href="https://www.figma.com/design/NIbmuJw8O9asFPpXjF39nE/%D0%92%D0%BE%D0%B9%D1%81-%D0%9B%D0%B8%D0%BD%D0%BA?node-id=69-334&t=eQVYKzlmxrWiBqaJ-1" target="_blank" rel="noopener noreferrer">Открыть макеты</a>
+                </article>
+
+                <article class="object-card">
+                    <header class="oc-head">
+                        <span class="marker marker-free" aria-hidden="true"></span>
+                        <h3>Фриланс</h3>
+                        <span class="chip chip-light">B2C</span>
+                    </header>
+                    <a class="oc-cover cover-free" href="https://www.figma.com/design/rB2tL3rSCTp4kgsamEe9Dk/Freelance?node-id=1-3142&t=pcoCMW6LA8TJE9wA-1" target="_blank" rel="noopener noreferrer" aria-label="Открыть фриланс-макеты в Figma">
+                        <img src="img/portfolio/FLL.png" alt="" loading="lazy" width="874" height="416">
+                    </a>
+                    <dl class="oc-props">
+                        <div><dt>Роль</dt><dd>Дизайнер</dd></div>
+                        <div><dt>Заказчики</dt><dd>Частные</dd></div>
+                        <div><dt>Что сделал</dt><dd>Проекты от разбора задачи до готовых макетов</dd></div>
+                    </dl>
+                    <a class="btn btn-outline" href="https://www.figma.com/design/rB2tL3rSCTp4kgsamEe9Dk/Freelance?node-id=1-3142&t=pcoCMW6LA8TJE9wA-1" target="_blank" rel="noopener noreferrer">Открыть макеты</a>
+                </article>
+            </div>
+        </section>
+
+        <!-- Обо мне -->
+        <section class="section" id="about">
+            <div class="section-head">
+                <h2>Обо мне</h2>
+            </div>
+
+            <div class="about">
+                <img class="about-photo" src="img/iam.jpg" alt="Сергей Щербаков" width="960" height="1280" loading="lazy">
+
+                <div class="about-text">
+                    <p class="about-lead">Продуктовый дизайнер. С 2022 года проектирую интерфейсы для финансового сектора и госсектора, до этого 6 лет работал в маркетинге.</p>
+                    <p>Окончил МПГУ им. Ленина в 2015 году по специальности «политолог». На 5 курсе, как один из лучших студентов потока, был удостоен стажировки в Государственной Думе РФ.</p>
+                    <p>Опыт в маркетинге помогает говорить с бизнесом на одном языке: я оцениваю дизайн через продуктовые метрики, а не через ощущения. Работаю в кросс-функциональных командах, умею защищать решения и превращать критику в улучшения.</p>
+                    <p class="about-hobby">В свободное время: спорт, история, гитара, классическая литература.</p>
+                </div>
+
+                <div class="about-side">
+                    <div class="side-block">
+                        <h3>Что я делаю лучше всего</h3>
+                        <ul class="checks">
+                            <li>Упрощаю интерфейсы, где много данных: карты, панели, таблицы</li>
+                            <li>Строю дизайн-системы, которыми пользуются и дизайнеры, и фронтенд</li>
+                            <li>Связываю дизайн с бизнес-результатом: конверсией и сроками вывода</li>
+                            <li>Делаю визуальные концепции и графику для маркетинга</li>
+                        </ul>
+                    </div>
+                    <div class="side-block">
+                        <h3>Инструменты</h3>
+                        <ul class="tools">
+                            <li>Figma</li>
+                            <li>ИИ-инструменты</li>
+                            <li>Photoshop</li>
+                            <li>Illustrator</li>
+                            <li>Blender</li>
+                            <li>HTML и CSS</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Контакты -->
+        <section class="contacts" id="contacts">
+            <div class="contacts-inner">
+                <h2>Обсудим задачу</h2>
+                <p class="contacts-note">Ищу работу в продуктовой команде: полная занятость, офис, гибрид или удалёнка. Быстрее всего отвечаю в Telegram.</p>
+                <ul class="contacts-list">
+                    <li>
+                        <span>Telegram</span>
+                        <a href="https://t.me/ionizy" target="_blank" rel="noopener noreferrer">@ionizy</a>
+                    </li>
+                    <li>
+                        <span>Телефон</span>
+                        <a href="tel:+79680140400">+7 968 014 04 00</a>
+                    </li>
+                    <li>
+                        <span>Почта</span>
+                        <a href="mailto:ionizy@gmail.com">ionizy@gmail.com</a>
+                    </li>
+                </ul>
+                <p class="footer-copy">© 2026 Сергей Щербаков. Дизайн и вёрстка — мои.</p>
+            </div>
+        </section>
+    </main>
 
     <script src="script.js"></script>
 </body>
