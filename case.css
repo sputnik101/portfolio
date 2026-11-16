@@ -1,0 +1,49 @@
+/* Страница кейса. Использует переменные и базовые классы из style.css */
+.case-page .topbar > .pill:first-child { justify-self: start; }
+.case { max-width: 1040px; margin: 0 auto; padding: 96px var(--gutter) 80px; }
+.case h1 { font-size: clamp(30px, 5vw, 54px); line-height: 1.08; font-weight: 600; letter-spacing: -0.02em; margin: 14px 0 20px; max-width: 18ch; }
+.case h2 { font-size: clamp(24px, 3.4vw, 36px); line-height: 1.15; font-weight: 600; letter-spacing: -0.01em; margin: 10px 0 18px; }
+.case h3 { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 600; margin-bottom: 10px; }
+.case h3 span { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--route); color: #fff; font-size: 15px; }
+.case-hero { padding: 32px 0 8px; }
+.case-lead { font-size: clamp(18px, 2vw, 21px); color: var(--muted); max-width: 62ch; }
+.case-text { max-width: 68ch; color: var(--ink); margin-bottom: 20px; }
+.case-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 32px; }
+.case-facts > div { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-s); padding: 16px 18px; }
+.case-facts dt { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+.case-facts dd { font-size: 16px; line-height: 1.4; }
+.case-facts strong { color: #21A038; font-weight: 600; }
+.case-block { margin-top: 72px; }
+.case-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.case-steps li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-s); padding: 16px 18px; line-height: 1.4; }
+.case-steps span { display: block; font-size: 13px; color: var(--route); font-weight: 600; margin-bottom: 6px; }
+.case-flow { display: grid; gap: 56px; margin-top: 32px; }
+.case-flow p { max-width: 68ch; margin-bottom: 18px; }
+.case-shot { background: #E8F5EB; border-radius: var(--r-l); padding: clamp(12px, 3vw, 32px); }
+.case-shot img { width: 100%; border-radius: 10px; box-shadow: var(--shadow); background: var(--surface); }
+.case-shot figcaption { font-size: 14px; color: var(--muted); margin-top: 12px; text-align: center; }
+.case-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.case-split { display: grid; grid-template-columns: 1fr minmax(220px, 300px); gap: 32px; align-items: start; }
+.case-shot-narrow { max-width: 620px; }
+.case-shot-phone { max-width: 360px; }
+.case-shot-phone img { border-radius: 24px; }
+.case-shot-mid { max-width: 820px; }
+.case-flow h3:not(:has(span)) { display: block; }
+.case-result h2 span { color: #21A038; }
+.case-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+.case-footer { max-width: 1040px; margin: 0 auto; padding: 24px var(--gutter) 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
+@media (max-width: 720px) {
+    .case-split { grid-template-columns: 1fr; }
+    .case-shot-phone { max-width: 300px; margin: 0 auto; }
+    .case-block { margin-top: 52px; }
+}
+@media (max-width: 560px) {
+    .case-page .topbar { grid-template-columns: auto 1fr; }
+    .case-page .topbar > .wordmark { justify-self: end; }
+    .case-page .topbar > .pill:last-child { display: none; }
+}
+.case-shot-panel { max-width: 460px; margin-top: 16px; }
+.case-vl .case-shot { background: #FDEFE4; }
+.case-vl .case-facts strong, .case-vl .case-result h2 span { color: #D9530A; }
+.case-vl .case-flow h3 span { background: #F26B1D; }
+.case-page .wordmark { color: var(--ink); mix-blend-mode: normal; }

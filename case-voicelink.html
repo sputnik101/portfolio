@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Кейс: ВойсЛинк, ГИС управления транспортом — Сергей Щербаков</title>
+    <meta name="description" content="Кейс Сергея Щербакова: интерфейс ГИС управления транспортными потоками города. Сценарий настройки адаптивной зоны светофорного управления.">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=11">
+    <link rel="stylesheet" href="case.css?v=6">
+</head>
+<body class="case-page case-vl">
+
+    <header class="topbar">
+        <a href="index.html#work" class="pill">← Все работы</a>
+        <a href="index.html" class="wordmark">Щербаков</a>
+        <a href="https://t.me/ionizy" class="pill" target="_blank" rel="noopener noreferrer">Написать в Telegram</a>
+    </header>
+
+    <main class="case">
+
+        <section class="case-hero">
+            <p class="label">[ кейс · 2023–2026 ]</p>
+            <h1>ВойсЛинк: настроить адаптивное управление светофорами на карте</h1>
+            <p class="case-lead">ГИС управления транспортными потоками города для администраций, губернаторов и транспортных инженеров. Главный сценарий кейса: инженер собирает адаптивную зону, задаёт в ней ленты координации и проверяет по графикам, что очереди сокращаются.</p>
+            <dl class="case-facts">
+                <div><dt>Роль</dt><dd>Ведущий UX/UI-дизайнер</dd></div>
+                <div><dt>Что делал</dt><dd>Получал задачу, чаще без ТЗ, и сам доводил её до макетов: состав экранов, состояния, переходы</dd></div>
+                <div><dt>Система</dt><dd>Дизайн-система и библиотека компонентов для дизайнеров и фронтенда</dd></div>
+                <div><dt>Результат</dt><dd>Каждый новый модуль выходит на <strong>1–1,5 месяца</strong> быстрее</dd></div>
+            </dl>
+        </section>
+
+        <section class="case-block">
+            <p class="label">[ задача ]</p>
+            <h2>Сложная настройка без потери карты</h2>
+            <p class="case-text">Адаптивная зона — это группа перекрёстков, где светофоры подстраиваются под поток по данным детекторов. У зоны десятки параметров, а результат настройки виден только на карте и на графиках. Инженеру нужно менять параметры и сразу видеть, к каким улицам они относятся.</p>
+            <p class="case-text">Отсюда главное решение модуля: карточка зоны открывается панелью сбоку, а не отдельной страницей. Объект на карте и его данные видны одновременно, вкладки панели повторяют шаги работы инженера.</p>
+        </section>
+
+        <section class="case-block">
+            <p class="label">[ главный сценарий ]</p>
+            <h2>От параметров зоны до проверки результата</h2>
+
+            <div class="case-flow">
+                <article>
+                    <h3><span>1</span>Свойства зоны</h3>
+                    <p>Параметры собраны в три блока по смыслу: описание зоны, правила обработки данных с детекторов и параметры цикла управления. Отдельно решено, что делать с неполными данными: направления без детекторов, частичные и устаревшие данные настраиваются явно. Перед сохранением граф зоны можно проверить.</p>
+                    <figure class="case-shot ">
+                        <img src="img/cases/voicelink/01-zone.jpg" alt="Карточка адаптивной зоны: вкладка «Свойства» рядом с картой" loading="lazy" width="1760" height="990">
+                        <figcaption>Вкладка «Свойства»: три блока параметров, проверка графа и сохранение</figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <h3><span>2</span>Ленты координации</h3>
+                    <p>Зона показана на карте полигоном, ленты — стрелками по улицам. Лента собирается из рёбер графа: в панели это карточка со списком рёбер, на карте — маршрут. Выбранная лента подсвечена и в списке, и на карте, поэтому инженер не сверяет идентификаторы глазами.</p>
+                    <figure class="case-shot ">
+                        <img src="img/cases/voicelink/02-lanes.jpg" alt="Вкладка «Ленты координации»: зона и ленты на карте, список рёбер в панели" loading="lazy" width="1760" height="990">
+                        <figcaption>Ленты координации: выбранная лента выделена в панели и на карте</figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <h3><span>3</span>Проверка по статистике</h3>
+                    <p>После запуска инженер смотрит длину очереди и скорость по рёбрам. Цвета лент на графике и на карте совпадают, так что столбец сразу связывается с улицей. Ниже динамика по времени в трёх линиях: стартовое, ожидаемое и фактическое значение. Видно, сработала ли настройка так, как рассчитывали.</p>
+                    <figure class="case-shot ">
+                        <img src="img/cases/voicelink/03-stats.jpg" alt="Вкладка «Статистика лент»: графики очереди и скорости рядом с картой" loading="lazy" width="1760" height="988">
+                        <figcaption>Статистика лент: цвета на графике и на карте совпадают</figcaption>
+                    </figure>
+                    <figure class="case-shot case-shot-panel">
+                        <img src="img/cases/voicelink/04-stats-panel.jpg" alt="Панель статистики целиком: очередь, скорость и динамика по времени" loading="lazy" width="623" height="1752">
+                        <figcaption>Панель целиком: стартовое, ожидаемое и фактическое</figcaption>
+                    </figure>
+                </article>
+            </div>
+        </section>
+
+        <section class="case-block">
+            <p class="label">[ система ]</p>
+            <h2>Дизайн-система для карты и панелей</h2>
+            <p class="case-text">Панели, вкладки, поля, чипы и графики собраны в библиотеку компонентов, которой пользуются и дизайнеры, и фронтенд-разработчики. Новый модуль собирается из готовых частей, поэтому интерфейсы стали единообразными, а вывод каждого нового модуля в эксплуатацию сократился на 1–1,5 месяца.</p>
+        </section>
+
+        <section class="case-block case-result">
+            <p class="label">[ результат ]</p>
+            <h2>Каждый новый модуль выходит на <span>1–1,5 месяца</span> быстрее</h2>
+            <p class="case-text">За три года полностью переработан интерфейс системы: новые модули спроектированы, существующие обновлены.</p>
+            <div class="case-actions">
+                <a class="pill pill-line" href="https://t.me/ionizy" target="_blank" rel="noopener noreferrer">Обсудить кейс в Telegram</a>
+                <a class="pill" href="index.html#work">← Все работы</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="case-footer">
+        <p>© 2026 Сергей Щербаков</p>
+        <p><a href="https://t.me/ionizy" target="_blank" rel="noopener noreferrer">@ionizy</a> · <a href="mailto:ionizy@gmail.com">ionizy@gmail.com</a></p>
+    </footer>
+
+</body>
+</html>
