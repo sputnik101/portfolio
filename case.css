@@ -47,3 +47,5 @@
 .case-vl .case-facts strong, .case-vl .case-result h2 span { color: #D9530A; }
 .case-vl .case-flow h3 span { background: #F26B1D; }
 .case-page .wordmark { color: var(--ink); mix-blend-mode: normal; }
+.case-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; padding-top: 0; }
+.case-tags li { font-size: 14px; padding: 6px 12px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
