@@ -405,3 +405,6 @@
 
     observer.observe(route);
 })();
+
+// имя в шапке прячется при прокрутке
+(() => { const t = () => document.body.classList.toggle('is-scrolled', window.scrollY > 40); window.addEventListener('scroll', t, { passive: true }); t(); })();

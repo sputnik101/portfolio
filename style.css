@@ -1775,3 +1775,7 @@ main {
 .sim-phase {
     white-space: nowrap;
 }
+
+/* имя в шапке видно только наверху страницы: при прокрутке не ездит поверх контента */
+.wordmark { transition: opacity 0.25s ease, visibility 0.25s ease; }
+body.is-scrolled .wordmark { opacity: 0; visibility: hidden; pointer-events: none; }
