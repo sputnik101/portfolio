@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Кейс: HostVDS, концепт редизайна — Сергей Щербаков</title>
+    <meta name="description" content="Концепт редизайна hostvds.com: разбор главной «было → стало», конфигуратор сервера с итоговой ценой на первом экране, гипотезы и метрики для проверки.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Сергей Щербаков">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:url" content="https://sputnik101.github.io/portfolio/case-hostvds.html">
+    <meta property="og:title" content="Кейс: HostVDS, концепт редизайна — Сергей Щербаков">
+    <meta property="og:description" content="Шесть зон, где главная теряет внимание и доверие, и конфигуратор с итоговой ценой на первом экране.">
+    <meta property="og:image" content="https://sputnik101.github.io/portfolio/img/og.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=17">
+    <link rel="stylesheet" href="case.css?v=11">
+</head>
+<body class="case-page case-hv">
+
+    <header class="topbar">
+        <a href="index.html#work" class="pill">← Все работы</a>
+        <a href="index.html" class="wordmark">Щербаков</a>
+        <a href="https://t.me/ionizy" class="pill" target="_blank" rel="noopener noreferrer">Написать в Telegram</a>
+    </header>
+
+    <main class="case">
+
+        <section class="case-hero">
+            <p class="label">[ кейс · концепт ]</p>
+            <h1>HostVDS: собрать сервер и увидеть цену на первом экране</h1>
+            <p class="case-lead">Концепт редизайна hostvds.com, облачного VPS-хостинга. Сейчас тарифы, сеть и диски показаны отдельными блоками, а итоговую цену и доступность региона пользователь выясняет сам. Я разобрал главную, нашёл шесть зон, где теряются внимание и доверие, и предложил решение.</p>
+            <dl class="case-facts">
+                <div><dt>Роль</dt><dd>UX/UI-дизайнер, инициативный концепт</dd></div>
+                <div><dt>Что делал</dt><dd>Разбор главной «было → стало», конфигуратор сервера, страницы тарифов и локаций</dd></div>
+                <div><dt>Экраны</dt><dd>Главная (десктоп и мобильная), тарифы, локации</dd></div>
+                <div><dt>Статус</dt><dd>Концепт; гипотезы и метрики для проверки описаны</dd></div>
+            </dl>
+        </section>
+
+        <section class="case-block">
+            <p class="label">[ инсайты ]</p>
+            <h2>Что мешает на текущей главной</h2>
+            <ol class="case-steps">
+                <li><span>Инсайт 1</span><b>Нет обещания.</b> Первый экран не говорит, почему HostVDS, а не другой хостинг: цены и почасовой оплаты на нём нет.</li>
+                <li><span>Инсайт 2</span><b>Цена собирается в голове.</b> Сервер, сеть и диск — три блока и две валюты. Итог пользователь считает сам.</li>
+                <li><span>Инсайт 3</span><b>Доверие под вопросом.</b> Недоступные регионы спрятаны мелким текстом, а на карте выглядят рабочими.</li>
+            </ol>
+        </section>
+
+        <section class="case-block">
+            <p class="label">[ было → стало ]</p>
+            <h2>Шесть зон главной</h2>
+            <div class="case-compare">
+                <div class="cmp"><h3><span>1</span>Первый экран</h3><p class="cmp-was"><b>Было:</b> общий заголовок «Облачные сервисы с быстрым откликом», нет кнопки действия, промокод теряется в верхней полосе.</p><p class="cmp-now"><b>Стало:</b> заголовок с ценой и сроком запуска, две кнопки, промокод копируется в один клик. Конфигуратор виден сразу, без прокрутки.</p></div>
+                <div class="cmp"><h3><span>2</span>Тарифы</h3><p class="cmp-was"><b>Было:</b> шесть одинаковых карточек без рекомендованной, вкладки Burstable / Highload / High Frequency без объяснений, регион мелкой подписью.</p><p class="cmp-now"><b>Стало:</b> конфигуратор. Регион — первый шаг, у каждого типа сервера пояснение в одну строку, размер выбирается на шкале.</p></div>
+                <div class="cmp"><h3><span>3</span>Недоступные регионы</h3><p class="cmp-was"><b>Было:</b> восемь недоступных регионов перечислены мелким текстом, а на карте дата-центров те же точки выглядят рабочими.</p><p class="cmp-now"><b>Стало:</b> статус живёт на чипе региона: «Скоро» и предложение подписаться на запуск, прямо на месте выбора.</p></div>
+                <div class="cmp"><h3><span>4</span>Тарифные планы сети</h3><p class="cmp-was"><b>Было:</b> сеть — отдельный блок ниже тарифов, её цену пользователь складывает сам, цена оформлена как кнопка.</p><p class="cmp-now"><b>Стало:</b> сеть — шаг конфигуратора, доплата сразу попадает в итог. Одна валюта на всей странице.</p></div>
+                <div class="cmp"><h3><span>5</span>Дополнительные диски</h3><p class="cmp-was"><b>Было:</b> ползунок диска живёт отдельно от серверов, список преимуществ плохо читается на ярком градиенте.</p><p class="cmp-now"><b>Стало:</b> дополнительный диск — переключатель в конфигураторе с подписью «3 реплики данных», цена сразу в итоге.</p></div>
+                <div class="cmp"><h3><span>6</span>«Как это работает»</h3><p class="cmp-was"><b>Было:</b> блок почти пустой, а Terraform и OpenStack — сильный аргумент для разработчиков — спрятаны в маленькой плашке.</p><p class="cmp-now"><b>Стало:</b> путь для разработчиков — прямо в конфигураторе, рядом с итоговой ценой.</p></div>
+            </div>
+        </section>
+
+        <section class="case-block">
+            <p class="label">[ решение ]</p>
+            <h2>Конфигуратор вместо карточек</h2>
+
+            <div class="case-flow">
+                <article>
+                    <h3><span>1</span>Главная</h3>
+                    <p>Слева обещание: «Свой сервер за минуту — от €1.49 в месяц», почасовая оплата и две кнопки. Справа конфигуратор в четыре шага: регион, назначение сервера, мощность, трафик и диск. Итоговая цена в месяц и в час видна всё время и меняется вместе с выбором.</p>
+                    <figure class="case-shot">
+                        <img src="img/cases/hostvds/01-desktop.jpg" alt="Главная HostVDS: обещание с ценой и конфигуратор сервера на первом экране" loading="lazy" width="1440" height="2070">
+                        <figcaption>Главная: обещание с ценой и конфигуратор на первом экране</figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <h3><span>2</span>Мобильная версия</h3>
+                    <p>Те же четыре шага идут сверху вниз, а итог с кнопкой «Создать сервер» закреплён внизу экрана.</p>
+                    <figure class="case-shot case-shot-phone">
+                        <img src="img/cases/hostvds/02-mobile.jpg" alt="Мобильная главная HostVDS с конфигуратором" loading="lazy" width="390" height="2143">
+                        <figcaption>Мобильная главная: итог закреплён внизу</figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <h3><span>3</span>Тарифы</h3>
+                    <p>Три типа серверов объяснены по задачам: «Сайт, бот, VPN», «Магазин, CRM, базы», «Игры и вычисления». Ниже таблица с фильтром по памяти и переключателем «в месяц / в час», рекомендованный тариф отмечен. Дополнительные опции собраны в блок «Можно добавить».</p>
+                    <figure class="case-shot">
+                        <img src="img/cases/hostvds/05-pricing.jpg" alt="Страница тарифов HostVDS: типы серверов и таблица тарифов" loading="lazy" width="1440" height="1540">
+                        <figcaption>Тарифы: типы серверов по задачам и таблица с фильтром</figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <h3><span>4</span>Локации</h3>
+                    <p>Каждый дата-центр — карточка со статусом «Доступен», «Распродано» или «Скоро» и пингом из сети пользователя. Для недоступных вместо кнопки создания — «Сообщить о местах» или «Узнать о запуске». Ближайшая локация предложена сверху.</p>
+                    <figure class="case-shot">
+                        <img src="img/cases/hostvds/04-locations.jpg" alt="Страница локаций HostVDS: статусы дата-центров и пинг" loading="lazy" width="1440" height="1700">
+                        <figcaption>Локации: честный статус и пинг у каждого дата-центра</figcaption>
+                    </figure>
+                </article>
+            </div>
+        </section>
+
+        <section class="case-block">
+            <p class="label">[ отброшенный вариант ]</p>
+            <h2>Тёмная главная</h2>
+            <p class="case-text">Первый вариант главной был тёмным, с блоком кода Terraform, CLI и API рядом с конфигуратором. В итоге я выбрал светлую версию.</p>
+            <figure class="case-shot">
+                <img src="img/cases/hostvds/03-dark-rejected.jpg" alt="Отброшенный тёмный вариант главной HostVDS" loading="lazy" width="1440" height="1136">
+                <figcaption>Отброшенный вариант: тёмная главная с кодом для разработчиков</figcaption>
+            </figure>
+        </section>
+
+        <section class="case-block case-result">
+            <p class="label">[ дальше ]</p>
+            <h2>Гипотезы и <span>как их проверить</span></h2>
+            <ol class="case-steps">
+                <li><span>Гипотеза 1</span><b>Больше посетителей доходят до регистрации.</b> Метрика: конверсия «главная → регистрация». Проверка: A/B-тест старого и нового первого экрана.</li>
+                <li><span>Гипотеза 2</span><b>Итоговая цена понятна быстрее.</b> Метрики: время до первого действия в конфигураторе, доля сессий с изменением параметров. Проверка: аналитика событий и юзабилити-тест на 5–7 человек.</li>
+                <li><span>Гипотеза 3</span><b>Меньше разочарований из-за регионов.</b> Метрики: подписки на запуск региона, обращения в поддержку о недоступных локациях.</li>
+            </ol>
+            <div class="case-actions">
+                <a class="pill" href="index.html#work">← Все работы</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="case-footer">
+        <p>© 2026 Сергей Щербаков</p>
+        <p><a href="https://t.me/ionizy" target="_blank" rel="noopener noreferrer">@ionizy</a> · <a href="mailto:ionizy@gmail.com">ionizy@gmail.com</a></p>
+    </footer>
+
+    <script>(() => { const t = () => document.body.classList.toggle('is-scrolled', window.scrollY > 40); window.addEventListener('scroll', t, { passive: true }); t(); })();</script>
+    <script src="case.js?v=1" defer></script>
+</body>
+</html>

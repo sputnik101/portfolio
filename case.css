@@ -49,3 +49,42 @@
 .case-page .wordmark { color: var(--ink); mix-blend-mode: normal; }
 .case-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; padding-top: 0; }
 .case-tags li { font-size: 14px; padding: 6px 12px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+
+/* Скриншоты открываются на весь экран по клику */
+.case-shot img { cursor: zoom-in; }
+.lightbox { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 56px 16px 16px;
+    background: rgba(18, 19, 26, 0.88); opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; }
+.lightbox.is-open { opacity: 1; visibility: visible; }
+.lightbox-frame { max-width: min(1600px, 100%); max-height: 100%; overflow: auto; border-radius: 12px; }
+.lightbox-frame img { display: block; max-width: 100%; height: auto; border-radius: 12px; background: #fff; cursor: zoom-out; }
+.lightbox-frame.is-zoomed img { max-width: none; cursor: zoom-out; }
+.lightbox-close { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%; border: 0;
+    background: #fff; color: var(--ink); font-size: 22px; line-height: 1; cursor: pointer; }
+.lightbox-cap { position: absolute; left: 16px; right: 72px; top: 22px; color: #fff; font-size: 14px; opacity: 0.8;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+body.lightbox-lock { overflow: hidden; }
+
+/* Ссылки в подвале: крупнее зона нажатия */
+.case-footer a { display: inline-block; padding: 12px 2px; color: var(--ink); }
+
+/* Кейс Систэм Электрик */
+.case-se .case-shot { background: #E2F3EE; }
+.case-se .case-facts strong, .case-se .case-result h2 span { color: #0B8F6E; }
+.case-se .case-flow h3 span { background: #0FA982; }
+.case-se .case-steps span { color: #0B8F6E; }
+.case-se .case-steps { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+
+/* Кейс HostVDS */
+.case-hv .case-shot { background: #E7ECFC; }
+.case-hv .case-result h2 span { color: #2F54EB; }
+.case-hv .case-flow h3 span, .case-hv .cmp h3 span { background: #2F54EB; }
+.case-hv .case-steps span { color: #2F54EB; }
+.case-steps li b { display: block; font-weight: 600; margin-bottom: 4px; }
+.case-compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.cmp { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-s); padding: 18px 20px; }
+.cmp h3 { font-size: 17px; margin-bottom: 12px; }
+.cmp h3 span { width: 26px; height: 26px; font-size: 13px; }
+.cmp p { font-size: 15px; line-height: 1.45; margin: 0 0 8px; }
+.cmp-was { color: var(--muted); }
+.cmp-now { padding-top: 8px; border-top: 1px dashed var(--line); }
+.cmp b { font-weight: 600; color: var(--ink); }
