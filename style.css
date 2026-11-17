@@ -136,11 +136,30 @@ h3 {
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
-    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    /* белая таблетка при наведении заливается лаймом снизу вверх */
+    --pill-fill: var(--lime);
+    background-image: linear-gradient(var(--pill-fill), var(--pill-fill));
+    background-repeat: no-repeat;
+    background-position: 50% 100%;
+    background-size: 100% 0%;
+    transition: background-size 0.35s cubic-bezier(.2, .7, .2, 1), background-color 0.2s, color 0.2s,
+                transform 0.25s cubic-bezier(.2, .7, .2, 1), box-shadow 0.25s;
 }
 
 .pill:hover {
-    border-color: var(--ink);
+    background-size: 100% 100%;
+    /* после заливки фон тоже красим, чтобы по краю не светилась белая кайма */
+    background-color: var(--pill-fill);
+    transition: background-size 0.35s cubic-bezier(.2, .7, .2, 1), background-color 0s 0.35s, color 0.2s,
+                transform 0.25s cubic-bezier(.2, .7, .2, 1), box-shadow 0.25s;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(27, 28, 37, 0.14);
+}
+
+.pill:active {
+    transform: translateY(0) scale(0.97);
+    box-shadow: 0 4px 10px rgba(27, 28, 37, 0.10);
+    transition-duration: 0.1s;
 }
 
 .pill-dark {
@@ -151,11 +170,21 @@ h3 {
 .pill-dark:hover {
     background: var(--route);
     border-color: var(--route);
+    box-shadow: 0 10px 22px rgba(74, 79, 224, 0.35);
 }
 
 .pill-line {
     box-shadow: none;
     border-color: var(--line);
+}
+
+.pill-line:hover {
+    border-color: var(--pill-fill);
+}
+
+/* в фиолетовом герое лайм уже занят главной кнопкой — белые заливаются розовым */
+.hero .pill:not(.pill-dark) {
+    --pill-fill: var(--pink);
 }
 
 /* ===== Верхняя панель ===== */
@@ -1295,6 +1324,7 @@ body {
 .hero .pill-dark:hover {
     background: #FFFFFF;
     border-color: #FFFFFF;
+    box-shadow: 0 10px 22px rgba(27, 28, 37, 0.22);
 }
 
 .here-pin {
@@ -1758,8 +1788,17 @@ main {
     transition: border-color 0.2s;
 }
 
+.sim-pause {
+    background-image: linear-gradient(var(--lime), var(--lime));
+    background-repeat: no-repeat;
+    background-position: 50% 100%;
+    background-size: 100% 0%;
+    transition: background-size 0.35s cubic-bezier(.2, .7, .2, 1), border-color 0.2s;
+}
+
 .sim-pause:hover {
-    border-color: var(--ink);
+    background-size: 100% 100%;
+    border-color: var(--lime);
 }
 
 .sim-pause[hidden] {
@@ -1779,3 +1818,11 @@ main {
 /* имя в шапке видно только наверху страницы: при прокрутке не ездит поверх контента */
 .wordmark { transition: opacity 0.25s ease, visibility 0.25s ease; }
 body.is-scrolled .wordmark { opacity: 0; visibility: hidden; pointer-events: none; }
+
+
+@media (prefers-reduced-motion: reduce) {
+    .pill:hover,
+    .pill:active {
+        transform: none;
+    }
+}
