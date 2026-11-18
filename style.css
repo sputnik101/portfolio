@@ -1865,7 +1865,12 @@ body.is-scrolled .wordmark { opacity: 0; visibility: hidden; pointer-events: non
 .folder-zs .folder-cover img:hover { transform: none; }
 
 /* пометка про экраны, сделанные ИИ */
-.folder-ai { font-size: 14px; color: var(--muted); margin: 10px 0 0; }
+.folder-ai { font-size: 14px; color: var(--muted); margin-top: -12px; margin-bottom: 12px; }
+
+/* лаймовые плашки в одном ряду карточек — на одной линии */
+.folder-body > .folder-result { margin-top: auto; }
+.folder-body > .folder-link { margin-top: 0; }
+.folder-body > p.folder-nda { margin-top: 12px; margin-bottom: 12px; min-height: 40px; line-height: 1.4; }
 
 /* ===================== Светофоры на схеме ===================== */
 .tl-layer {
