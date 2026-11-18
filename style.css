@@ -2228,3 +2228,125 @@ body.is-scrolled .wordmark { opacity: 0; visibility: hidden; pointer-events: non
 
 /* подложка: только сетка и крестики */
 .gis-road { display: none; }
+
+
+/* ===================== Юзабилити-проход ===================== */
+/* значок внешней ссылки */
+.ext { display: inline-block; margin-left: 2px; font-size: 0.9em; opacity: 0.6; }
+
+/* десктоп: разделы прямо в шапке вместо кнопки «Меню» */
+@media (min-width: 901px) {
+    .menu-toggle { display: none; }
+    .menu-panel,
+    .menu-panel[hidden] {
+        position: static;
+        display: flex;
+        min-width: 0;
+        padding: 0 6px;
+        height: 40px;
+        align-items: center;
+        gap: 2px;
+        border-radius: 999px;
+        box-shadow: 0 6px 16px rgba(27, 28, 37, 0.10);
+    }
+    .menu-panel a {
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 15px;
+        white-space: nowrap;
+    }
+    .menu-panel a[href="#numbers"],
+    .menu-panel a[href="#skills"] { display: none; }
+}
+
+/* NDA: замок вместо квадратика, похожего на чекбокс */
+.folder-nda::before {
+    width: 14px;
+    height: 16px;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 16'%3E%3Cpath d='M4 7V5a3 3 0 0 1 6 0v2' fill='none' stroke='black' stroke-width='1.6'/%3E%3Crect x='1' y='7' width='12' height='8.2' rx='2' fill='black'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 16'%3E%3Cpath d='M4 7V5a3 3 0 0 1 6 0v2' fill='none' stroke='black' stroke-width='1.6'/%3E%3Crect x='1' y='7' width='12' height='8.2' rx='2' fill='black'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* подсказка про светофоры */
+.sim-hint {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--route);
+    font-weight: 500;
+}
+@media (prefers-reduced-motion: no-preference) {
+    .tl-layer .tl:first-child { animation: tl-ping 1.6s ease-out 1.5s 3; }
+}
+@keyframes tl-ping {
+    0%   { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.85); }
+    100% { box-shadow: 0 0 0 16px rgba(255, 255, 255, 0); }
+}
+
+/* кнопки героя под заголовком */
+.hero-text .hero-actions { margin-top: 24px; }
+
+/* подвал */
+.footer a { color: inherit; }
+
+/* телефон: короче путь до работ */
+@media (max-width: 600px) {
+    .numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .number { padding: 18px 16px 20px; }
+    .number-value { font-size: 30px; }
+    .number .number-label { margin-top: 10px; font-size: 13px; line-height: 1.35; }
+
+    .sticker { min-height: 0; padding: 26px 20px 22px; }
+    .deck.stickers { gap: 24px; }
+
+    .sim-plan, .sim-speed { display: none; }
+}
+
+@media (max-width: 600px) {
+    .hide-sm { display: none; }
+    .callouts { padding-top: min(30vh, 220px); }
+    .hero-text .hero-actions { margin-top: 20px; }
+}
+
+
+/* ===================== Юзабилити-проход 2 ===================== */
+/* фиолетовый темнее: мелкий белый текст читается (контраст ≈ 5:1) */
+:root { --violet: #5A5EE8; }
+.hero-role, .hero-side { color: rgba(255, 255, 255, 0.92); }
+.coords { color: rgba(255, 255, 255, 0.9); }
+
+/* шапка получает подложку, когда под ней светлый контент */
+.topbar { transition: background-color 0.25s ease, box-shadow 0.25s ease, backdrop-filter 0.25s ease; }
+body.bar-solid .topbar,
+body.case-page.is-scrolled .topbar {
+    background: rgba(246, 246, 251, 0.82);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 1px 0 rgba(27, 28, 37, 0.06);
+    padding-bottom: 10px;
+    padding-top: calc(10px + env(safe-area-inset-top, 0px));
+}
+body.bar-solid .menu-panel { box-shadow: 0 2px 8px rgba(27, 28, 37, 0.08); }
+
+/* вся карточка проекта — ссылка */
+.folder.is-clickable { cursor: pointer; }
+/* ховер карточки — её собственный цвет */
+.folder-sber { --tint: #E8F5EB; --accent: #1A8A30; }
+.folder-vl   { --tint: #FDEFE4; --accent: #D9580F; }
+.folder-vz   { --tint: #EEEAFD; --accent: #6D4AE8; }
+.folder-hv   { --tint: #E7ECFC; --accent: #2F54EB; }
+.folder-se   { --tint: #E2F3EE; --accent: #0B8F6E; }
+.folder-free { --tint: #EDEEFA; --accent: var(--route); }
+.folder h3 { transition: color 0.2s; }
+.folder.is-clickable:hover h3 { color: var(--accent); }
+
+/* текущий раздел в меню */
+.menu-panel a.is-active { background: var(--paper); color: var(--route); }
+@media (min-width: 901px) and (max-width: 1120px) {
+    .wordmark { display: none; }
+}

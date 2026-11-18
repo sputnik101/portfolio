@@ -8,7 +8,7 @@
     box.setAttribute('role', 'dialog');
     box.setAttribute('aria-modal', 'true');
     box.setAttribute('aria-label', 'Скриншот целиком');
-    box.innerHTML = '<p class="lightbox-cap"></p><button class="lightbox-close" type="button" aria-label="Закрыть">✕</button><div class="lightbox-frame"><img alt=""></div>';
+    box.innerHTML = '<p class="lightbox-cap"></p><button class="lightbox-close" type="button" aria-label="Закрыть">✕</button><div class="lightbox-frame"><img alt=""></div><p class="lightbox-hint">Листайте скриншот пальцем</p>';
     document.body.appendChild(box);
 
     const frame = box.querySelector('.lightbox-frame');
@@ -24,6 +24,10 @@
         const fc = img.closest('figure')?.querySelector('figcaption');
         cap.textContent = fc ? fc.textContent : img.alt;
         frame.classList.remove('is-zoomed');
+        const wide = window.innerWidth <= 600 && (img.naturalWidth || 0) > 800;
+        frame.classList.toggle('is-wide', wide);
+        box.querySelector('.lightbox-hint').hidden = !wide;
+        frame.scrollTo(0, 0);
         box.classList.add('is-open');
         document.body.classList.add('lightbox-lock');
         closeBtn.focus();
@@ -46,6 +50,7 @@
     // клик по картинке: если она ужата под экран — показать в натуральную величину, иначе закрыть
     big.addEventListener('click', e => {
         e.stopPropagation();
+        if (frame.classList.contains('is-wide')) return;
         if (!frame.classList.contains('is-zoomed') && big.naturalWidth > big.clientWidth + 40) {
             frame.classList.add('is-zoomed');
         } else {

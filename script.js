@@ -784,3 +784,47 @@
     });
     window.addEventListener('load', build);
 })();
+
+
+// ===== Юзабилити: вся карточка проекта нажимается =====
+(() => {
+    document.querySelectorAll('.folder').forEach(card => {
+        const link = card.querySelector('.folder-link');
+        if (!link) return;
+        card.classList.add('is-clickable');
+        card.addEventListener('click', e => {
+            if (e.target.closest('a, button')) return;
+            if (String(window.getSelection())) return;
+            link.click();
+        });
+    });
+})();
+
+// ===== Шапка с подложкой после первого экрана =====
+(() => {
+    const hero = document.querySelector('.hero');
+    const t = () => {
+        const edge = hero ? hero.offsetHeight - 70 : 40;
+        document.body.classList.toggle('bar-solid', window.scrollY > edge);
+    };
+    window.addEventListener('scroll', t, { passive: true });
+    window.addEventListener('resize', t);
+    t();
+})();
+
+// ===== Текущий раздел в меню =====
+(() => {
+    const links = [...document.querySelectorAll('.menu-panel a[href^="#"]')];
+    const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+    const sections = [...map.keys()].map(id => document.getElementById(id)).filter(Boolean);
+    if (!sections.length) return;
+    const t = () => {
+        const y = window.scrollY + window.innerHeight * 0.35;
+        let cur = null;
+        sections.forEach(s => { if (s.offsetTop <= y) cur = s.id; });
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = sections[sections.length - 1].id;
+        links.forEach(a => a.classList.toggle('is-active', map.get(cur) === a));
+    };
+    window.addEventListener('scroll', t, { passive: true });
+    t();
+})();
