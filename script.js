@@ -675,3 +675,112 @@
 
 // имя в шапке прячется при прокрутке
 (() => { const t = () => document.body.classList.toggle('is-scrolled', window.scrollY > 40); window.addEventListener('scroll', t, { passive: true }); t(); })();
+
+// ===== Подложка ГИС под светлыми разделами =====
+// Сетка и контуры улиц, как на подложке карты. Почти прозрачные, под текстом бледнее.
+// Лёгкий параллакс при прокрутке; при «уменьшить движение» — статично.
+(() => {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const PARALLAX = 0.12;
+
+    const layer = document.createElement('div');
+    layer.className = 'gis-bg';
+    layer.setAttribute('aria-hidden', 'true');
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    layer.appendChild(svg);
+    document.body.prepend(layer);
+
+    let seed = 7;
+    const rand = () => {
+        seed = (seed * 16807) % 2147483647;
+        return (seed - 1) / 2147483646;
+    };
+
+    function build() {
+        seed = 7;
+        const W = window.innerWidth;
+        // запас по высоте под параллакс по всей странице
+        const H = Math.ceil(window.innerHeight + document.documentElement.scrollHeight * PARALLAX + 200);
+        svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+        svg.setAttribute('width', W);
+        svg.setAttribute('height', H);
+        svg.innerHTML = '';
+
+        const path = (d, cls) => {
+            const p = document.createElementNS(svgNS, 'path');
+            p.setAttribute('d', d);
+            p.setAttribute('class', cls);
+            svg.appendChild(p);
+        };
+
+        // крупные «улицы»: плавные кривые поперёк экрана
+        const step = 260;
+        for (let y = 80; y < H; y += step * (0.7 + rand() * 0.6)) {
+            const a = (rand() - 0.5) * 0.3;
+            const freq = 220 + rand() * 120;
+            const ph = rand() * 6;
+            let d = '';
+            for (let x = -40; x <= W + 40; x += 16) {
+                const yy = y + x * a + Math.sin(x / freq + ph) * 22;
+                d += (d ? ' L' : 'M') + x.toFixed(1) + ' ' + yy.toFixed(1);
+            }
+            path(d, 'gis-road');
+        }
+        // «проспекты» сверху вниз
+        for (let x = 60; x < W; x += 320 + rand() * 260) {
+            let d = '';
+            const b = (rand() - 0.5) * 0.25;
+            for (let y = -40; y <= H + 40; y += 16) {
+                const xx = x + y * b + Math.sin(y / 260 + x) * 24;
+                d += (d ? ' L' : 'M') + xx.toFixed(1) + ' ' + y.toFixed(1);
+            }
+            path(d, 'gis-road gis-road-main');
+        }
+        // мелкие кварталы
+        let small = '';
+        const count = Math.round((W * H) / 9000);
+        for (let i = 0; i < count; i++) {
+            const x = rand() * W;
+            const y = rand() * H;
+            const len = 12 + rand() * 36;
+            const horiz = rand() < 0.5;
+            small += `M${x.toFixed(0)} ${y.toFixed(0)} l${horiz ? len.toFixed(0) : 0} ${horiz ? 0 : len.toFixed(0)}`;
+        }
+        path(small, 'gis-street');
+        // отметки-крестики в узлах сетки
+        let ticks = '';
+        for (let y = 96; y < H; y += 192) {
+            for (let x = 96; x < W; x += 192) {
+                if (rand() < 0.35) ticks += `M${x - 5} ${y} h10 M${x} ${y - 5} v10`;
+            }
+        }
+        path(ticks, 'gis-tick');
+    }
+
+    let ticking = false;
+    function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+            const y = window.scrollY;
+            // до конца первого экрана подложку не видно, двигаем мягко
+            layer.style.transform = `translate3d(0, ${(-y * PARALLAX).toFixed(1)}px, 0)`;
+            ticking = false;
+        });
+    }
+
+    build();
+    if (!reduceMotion) {
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    }
+    let t;
+    window.addEventListener('resize', () => {
+        clearTimeout(t);
+        t = setTimeout(build, 200);
+    });
+    window.addEventListener('load', build);
+})();

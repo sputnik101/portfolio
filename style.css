@@ -594,6 +594,7 @@ h3 {
 .folder-se .marker   { background: #0FA982; }
 .folder-hv .marker   { background: #2F54EB; }
 .folder-zs .marker   { background: #5B6475; }
+.folder-vz .marker   { background: #6D4AE8; }
 
 .folder-body {
     flex: 1;
@@ -622,6 +623,7 @@ h3 {
 .folder-se .folder-cover   { background: #E2F3EE; }
 .folder-hv .folder-cover   { background: #E7ECFC; }
 .folder-zs .folder-cover   { background: #ECEEF2; }
+.folder-vz .folder-cover   { background: #EEEAFD; }
 
 .folder-cover img {
     width: 100%;
@@ -1862,6 +1864,9 @@ body.is-scrolled .wordmark { opacity: 0; visibility: hidden; pointer-events: non
 }
 .folder-zs .folder-cover img:hover { transform: none; }
 
+/* пометка про экраны, сделанные ИИ */
+.folder-ai { font-size: 14px; color: var(--muted); margin: 10px 0 0; }
+
 /* ===================== Светофоры на схеме ===================== */
 .tl-layer {
     position: absolute;
@@ -2133,3 +2138,88 @@ body.is-scrolled .wordmark { opacity: 0; visibility: hidden; pointer-events: non
 .sim-plan-bar { overflow: hidden; height: 10px; }
 .sim-plan-now { top: 0; bottom: 0; width: 3px; box-shadow: none; }
 .sim-plan-bar span:first-of-type { border-radius: 0; }
+
+/* обложки-скриншоты: без наложения на фон */
+.folder-cover img.cover-shot { mix-blend-mode: normal; }
+
+/* ===== Подложка ГИС ===== */
+.gis-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    pointer-events: none;
+    will-change: transform;
+    /* сетка */
+    background-image:
+        linear-gradient(rgba(74, 79, 224, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74, 79, 224, 0.045) 1px, transparent 1px);
+    background-size: 48px 48px;
+    /* под колонкой текста бледнее, к краям — заметнее */
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.35) 22%, rgba(0, 0, 0, 0.35) 78%, #000 100%);
+    mask-image: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.35) 22%, rgba(0, 0, 0, 0.35) 78%, #000 100%);
+}
+
+.gis-bg svg { display: block; }
+
+.gis-road {
+    fill: none;
+    stroke: rgba(74, 79, 224, 0.10);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.gis-road-main {
+    stroke: rgba(74, 79, 224, 0.12);
+    stroke-width: 3;
+}
+
+.gis-street {
+    fill: none;
+    stroke: rgba(74, 79, 224, 0.07);
+    stroke-width: 1;
+}
+
+.gis-tick {
+    fill: none;
+    stroke: rgba(74, 79, 224, 0.22);
+    stroke-width: 1.2;
+}
+
+@media (max-width: 720px) {
+    .gis-bg {
+        -webkit-mask-image: none;
+        mask-image: none;
+        opacity: 0.7;
+    }
+}
+
+/* подложка чётче: без мелких штрихов и неравномерной маски */
+.gis-bg {
+    background-image:
+        linear-gradient(rgba(74, 79, 224, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74, 79, 224, 0.07) 1px, transparent 1px);
+    -webkit-mask-image: none;
+    mask-image: none;
+}
+.gis-street { display: none; }
+.gis-road { stroke: rgba(74, 79, 224, 0.16); stroke-width: 2; }
+.gis-road-main { stroke: rgba(74, 79, 224, 0.2); stroke-width: 3; }
+.gis-tick { stroke: rgba(74, 79, 224, 0.45); stroke-width: 1.5; }
+@media (max-width: 720px) { .gis-bg { opacity: 0.85; } }
+
+.sim-motto {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--muted);
+    max-width: 34ch;
+}
+
+/* подложка: только сетка и крестики */
+.gis-road { display: none; }

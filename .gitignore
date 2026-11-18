@@ -1,3 +1,5 @@
 img/cases/systeme/*.png
 img/cases/systeme/_prev/
 img/cases/hostvds/*.png
+_tools/
+img/cases/vzr/*.png
