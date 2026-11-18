@@ -38,11 +38,51 @@
     const BG = [108, 112, 247];                 // сиреневый фон первого экрана
     const COLORS = { free: '#D4F56A', slow: '#FFB36B', jam: '#FF9EC8' };
     const SPEED = { free: 1.3, slow: 0.55, jam: 0.15 };
-    const SIM_MINUTES_PER_SECOND = 6;
+    // скорость: сколько минут схемы проходит за секунду
+    const SPEEDS = [
+        { m: 1, label: 'сутки за 24 мин' },
+        { m: 3, label: 'сутки за 8 мин' },
+        { m: 6, label: 'сутки за 4 мин' },
+        { m: 15, label: 'сутки за 96 с' },
+        { m: 30, label: 'сутки за 48 с' }
+    ];
+    let simSpeed = 6;
+
+    // планы работы светофоров по времени суток (часы как у подписи фазы дня)
+    // ray / ring — зелёный по лучу и по кольцу, секунды
+    const PLANS = [
+        { key: 'night', name: 'ночной', from: 23.5, to: 7, cycle: 60, ray: 30, ring: 24, color: '#3D41B8' },
+        { key: 'morning', name: 'утренний пик', from: 7, to: 10.5, cycle: 120, ray: 72, ring: 40, color: '#FFB36B' },
+        { key: 'day', name: 'дневной', from: 10.5, to: 16.5, cycle: 90, ray: 46, ring: 38, color: '#D4F56A' },
+        { key: 'evening-peak', name: 'вечерний пик', from: 16.5, to: 20.5, cycle: 120, ray: 72, ring: 40, color: '#FF9EC8' },
+        { key: 'evening', name: 'вечерний', from: 20.5, to: 23.5, cycle: 80, ray: 42, ring: 32, color: '#9AD8FF' }
+    ];
+    const planAt = hour => PLANS.find(pl => (pl.from < pl.to ? hour >= pl.from && hour < pl.to : hour >= pl.from || hour < pl.to)) || PLANS[2];
+    const hhmm = h => `${String(Math.floor(h) % 24).padStart(2, '0')}:${String(Math.round((h % 1) * 60)).padStart(2, '0')}`;
 
     const clockEl = document.querySelector('.sim-clock');
     const phaseEl = document.querySelector('.sim-phase');
     const pauseBtn = document.querySelector('.sim-pause');
+    const speedInput = document.querySelector('.sim-speed-input');
+    const speedNote = document.querySelector('.sim-note');
+    const planBar = document.querySelector('.sim-plan-bar');
+    const planNow = document.querySelector('.sim-plan-now');
+    const planName = document.querySelector('.sim-plan-name');
+
+    // полоска суток: отрезки планов
+    if (planBar) {
+        PLANS.forEach(pl => {
+            const parts = pl.from < pl.to ? [[pl.from, pl.to]] : [[pl.from, 24], [0, pl.to]];
+            parts.forEach(([a, b]) => {
+                const seg = document.createElement('span');
+                seg.style.left = `${(a / 24) * 100}%`;
+                seg.style.width = `${((b - a) / 24) * 100}%`;
+                seg.style.background = pl.color;
+                seg.title = `${pl.name}: ${hhmm(pl.from)}–${hhmm(pl.to)}`;
+                planBar.insertBefore(seg, planNow);
+            });
+        });
+    }
 
     let W = 0;
     let H = 0;
@@ -176,7 +216,9 @@
                 const a = (i / 200) * Math.PI * 2;
                 pts.push(at(a, f * R * (1 + 0.05 * Math.sin(3 * a + p1) + 0.03 * Math.sin(5 * a + p2))));
             }
-            roads.push(makeRoad(pts, w, rand, kind));
+            const ring = makeRoad(pts, w, rand, kind);
+            Object.assign(ring, { f, p1, p2 });
+            roads.push(ring);
         });
 
         for (let i = 0; i < 13; i++) {
@@ -187,7 +229,9 @@
                 const t = j / 60;
                 pts.push(at(a0 + bend * t * t, (0.09 + t * 1.25) * R));
             }
-            roads.push(makeRoad(pts, 2 + Math.round(rand() * 1.5), rand, 'radial'));
+            const ray = makeRoad(pts, 2 + Math.round(rand() * 1.5), rand, 'radial');
+            Object.assign(ray, { a0, bend, num: i + 1 });
+            roads.push(ray);
         }
 
         // фон, улицы, река
@@ -244,6 +288,7 @@
 
         lastRoadsMinute = -999;
         refreshRoads(true);
+        placeLights({ cx, cy, R, at });
         draw(false);
     }
 
@@ -292,6 +337,8 @@
         const mm = String(total % 60).padStart(2, '0');
         if (clockEl) clockEl.textContent = `${hh}:${mm}`;
         if (phaseEl) phaseEl.textContent = phase(total / 60);
+        if (planNow) planNow.style.left = `${(total / 1440) * 100}%`;
+        if (planName) planName.textContent = planAt(total / 60).name;
     }
 
     function draw(move) {
@@ -333,8 +380,10 @@
         if (lastTick) {
             const dt = Math.min(time - lastTick, 100) / 1000;
             if (!paused) {
-                simMinutes = (simMinutes + dt * SIM_MINUTES_PER_SECOND) % 1440;
+                simMinutes = (simMinutes + dt * simSpeed) % 1440;
+                lightClock += dt;
                 refreshRoads(false);
+                tickLights();
             }
         }
         lastTick = time;
@@ -351,6 +400,224 @@
 
     function stop() {
         running = false;
+    }
+
+    // ===== Светофоры на перекрёстках колец и лучей =====
+    // Демо: данные выдуманы, но связаны со схемой — загрузка берётся с дорог, цикл зависит от часа.
+    const RING_NAMES = { 0.17: 'Садовое кольцо', 0.3: 'ТТК' };
+    const SIGNAL = {
+        green: { color: '#7BE36B', label: 'зелёный' },
+        yellow: { color: '#FFD24A', label: 'жёлтый' },
+        red: { color: '#FF5C7A', label: 'красный' },
+        flash: { color: '#FFD24A', label: 'жёлтый мигающий' }
+    };
+    const LEVEL_LABEL = { free: 'свободно', slow: 'плотно', jam: 'пробка' };
+    const hero = canvas.closest('.hero');
+    let lights = [];
+    let lightClock = 0;
+    let tlLayer = null;
+    let card = null;
+    let openLight = null;
+
+    function signalOf(light) {
+        const plan = planAt(simMinutes / 60);
+        // ночью светофоры «по плану» переходят на жёлтый мигающий
+        if (plan.key === 'night' && !light.adaptive) return 'flash';
+        // демо-цикл 10 секунд в тех же пропорциях, что и план: зелёный по лучу, жёлтый, красный
+        const green = (plan.ray / plan.cycle) * 10;
+        const t = (lightClock + light.offset) % 10;
+        return t < green ? 'green' : t < green + 0.8 ? 'yellow' : 'red';
+    }
+
+    function ringRadius(ring, a, R) {
+        return ring.f * R * (1 + 0.05 * Math.sin(3 * a + ring.p1) + 0.03 * Math.sin(5 * a + ring.p2));
+    }
+
+    function placeLights({ R, at }) {
+        if (!hero) return;
+        if (!tlLayer) {
+            tlLayer = document.createElement('div');
+            tlLayer.className = 'tl-layer';
+            canvas.after(tlLayer);
+        }
+        closeCard();
+        tlLayer.innerHTML = '';
+        lights = [];
+
+        const heroRect = hero.getBoundingClientRect();
+        const avoid = [...hero.querySelectorAll('.callout, .map-meta, .here, .hero-bottom, .sim')]
+            .map(el => el.getBoundingClientRect())
+            .filter(r => r.width > 0)
+            .map(r => ({ l: r.left - heroRect.left - 30, r: r.right - heroRect.left + 30, t: r.top - heroRect.top - 30, b: r.bottom - heroRect.top + 30 }));
+        const blocked = (x, y) => avoid.some(b => x > b.l && x < b.r && y > b.t && y < b.b);
+        const mobile = W < 900;
+        const maxY = mobile ? Math.min(H * 0.42, 330) : H * 0.6;
+        const limit = mobile ? 4 : 8;
+
+        const rings = roads.filter(r => r.f === 0.17 || r.f === 0.3);
+        const rays = roads.filter(r => r.kind === 'radial');
+        const candidates = [];
+        rings.forEach(ring => rays.forEach(ray => {
+            const g = t => (0.09 + 1.25 * t) * R - ringRadius(ring, ray.a0 + ray.bend * t * t, R);
+            let lo = 0;
+            let hi = 1;
+            for (let k = 0; k < 30; k++) {
+                const mid = (lo + hi) / 2;
+                if (g(mid) < 0) lo = mid; else hi = mid;
+            }
+            const t = (lo + hi) / 2;
+            const a = ray.a0 + ray.bend * t * t;
+            const [x, y] = at(a, (0.09 + 1.25 * t) * R);
+            if (x < W * 0.06 || x > W * 0.94 || y < 84 || y > maxY || blocked(x, y)) return;
+            const ringIdx = Math.round((((a % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI * 2) * 200) % 200;
+            candidates.push({ x, y, ring, ray, ringIdx: Math.min(ringIdx, ring.levels.length - 1), rayIdx: Math.min(Math.round(t * 60), ray.levels.length - 1) });
+        }));
+
+        // разрежаем, чтобы маркеры не слипались
+        candidates.sort((p, q) => p.y - q.y);
+        candidates.forEach(c => {
+            if (lights.length >= limit) return;
+            if (lights.some(l => Math.hypot(l.x - c.x, l.y - c.y) < 90)) return;
+            lights.push(c);
+        });
+
+        lights.forEach((light, i) => {
+            light.id = 1040 + light.ray.num * 7 + (light.ring.f === 0.3 ? 3 : 0);
+            light.name = `${RING_NAMES[light.ring.f]} × луч ${light.ray.num}`;
+            light.adaptive = i % 3 !== 2;
+            light.offset = (i * 3.7) % 10;
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'tl';
+            btn.style.left = `${light.x}px`;
+            btn.style.top = `${light.y}px`;
+            btn.setAttribute('aria-label', `Светофор: ${light.name}. Открыть карточку`);
+            btn.setAttribute('aria-expanded', 'false');
+            btn.innerHTML = '<span class="tl-body"><i data-s="red"></i><i data-s="yellow"></i><i data-s="green"></i></span>';
+            btn.addEventListener('click', event => {
+                event.stopPropagation();
+                if (openLight === light) closeCard(); else openCard(light);
+            });
+            light.btn = btn;
+            tlLayer.appendChild(btn);
+        });
+        tickLights();
+    }
+
+    function lightData(light) {
+        const hour = simMinutes / 60;
+        const I = intensity(hour);
+        const order = ['free', 'slow', 'jam'];
+        const level = order[Math.max(order.indexOf(light.ring.levels[light.ringIdx]), order.indexOf(light.ray.levels[light.rayIdx]))];
+        const plan = planAt(hour);
+        // адаптивный светофор поправляет план по детекторам: при пробке цикл длиннее, на пустой дороге короче
+        const delta = light.adaptive ? { free: -8, slow: 4, jam: 12 }[level] : 0;
+        const cycle = plan.cycle + delta;
+        const ray = plan.ray + (light.adaptive ? Math.round(delta * 0.7) : 0);
+        const ring = plan.ring + (light.adaptive ? delta - Math.round(delta * 0.7) : 0);
+        const minute = Math.floor(simMinutes);
+        const jitter = ((light.id * 31 + minute * 7) % 5);
+        const queue = level === 'jam' ? 16 + jitter * 3 : level === 'slow' ? 6 + jitter : jitter;
+        return { level, cycle, queue, plan, ray, ring, I };
+    }
+
+    function tickLights() {
+        lights.forEach(light => {
+            const s = signalOf(light);
+            if (light.signal !== s) {
+                light.signal = s;
+                light.btn.dataset.signal = s;
+            }
+        });
+        if (openLight) fillCard(openLight);
+    }
+
+    function fillCard(light) {
+        const { level, cycle, queue, plan, ray, ring } = lightData(light);
+        const s = SIGNAL[light.signal];
+        card.querySelector('.tl-signal').innerHTML = `<i style="background:${s.color}"></i>${s.label}`;
+        card.querySelector('[data-k="mode"]').textContent = light.adaptive ? 'адаптивный: план + детекторы' : 'строго по плану';
+        card.querySelector('[data-k="plan"]').innerHTML = `<i style="background:${plan.color}"></i>${plan.name}, ${hhmm(plan.from)}–${hhmm(plan.to)}`;
+        const flash = plan.key === 'night' && !light.adaptive;
+        card.querySelector('[data-k="cycle"]').textContent = flash
+            ? 'отключён до 07:00'
+            : light.adaptive && cycle !== plan.cycle
+                ? `${cycle} с (по плану ${plan.cycle} с)`
+                : `${cycle} с`;
+        card.querySelector('[data-k="split"]').textContent = flash ? '—' : `луч ${ray} с · кольцо ${ring} с`;
+        card.querySelector('[data-k="load"]').innerHTML = `<i style="background:${COLORS[level]}"></i>${LEVEL_LABEL[level]}`;
+        card.querySelector('[data-k="queue"]').textContent = queue ? `≈ ${queue} авт.` : 'нет';
+    }
+
+    function openCard(light) {
+        closeCard();
+        openLight = light;
+        card = document.createElement('div');
+        card.className = 'tl-card';
+        card.setAttribute('role', 'dialog');
+        card.setAttribute('aria-label', `Светофорный объект ${light.id}`);
+        card.innerHTML = `
+            <div class="tl-card-head">
+                <span class="tl-signal"></span>
+                <button type="button" class="tl-close" aria-label="Закрыть">✕</button>
+            </div>
+            <p class="tl-id">Светофорный объект № ${light.id}</p>
+            <p class="tl-name">${light.name}</p>
+            <dl>
+                <div><dt>План</dt><dd data-k="plan"></dd></div>
+                <div><dt>Режим</dt><dd data-k="mode"></dd></div>
+                <div><dt>Цикл</dt><dd data-k="cycle"></dd></div>
+                <div><dt>Зелёный</dt><dd data-k="split"></dd></div>
+                <div><dt>Загрузка</dt><dd data-k="load"></dd></div>
+                <div><dt>Очередь</dt><dd data-k="queue"></dd></div>
+            </dl>
+            <p class="tl-note">Демо-данные на схеме. <a href="case-voicelink.html">Как это устроено в настоящей ГИС →</a></p>`;
+        tlLayer.appendChild(card);
+        card.querySelector('.tl-close').addEventListener('click', () => closeCard(true));
+        card.addEventListener('click', event => event.stopPropagation());
+        fillCard(light);
+
+        // карточка рядом с маркером, но в пределах экрана
+        const cw = card.offsetWidth;
+        const ch = card.offsetHeight;
+        let left = light.x + 22;
+        if (left + cw > W - 12) left = light.x - cw - 22;
+        left = Math.max(12, Math.min(left, W - cw - 12));
+        let top = light.y - ch / 2;
+        top = Math.max(76, Math.min(top, H - ch - 12));
+        card.style.left = `${left}px`;
+        card.style.top = `${top}px`;
+        light.btn.setAttribute('aria-expanded', 'true');
+        light.btn.classList.add('is-open');
+        card.querySelector('.tl-close').focus({ preventScroll: true });
+    }
+
+    function closeCard(returnFocus) {
+        if (card) card.remove();
+        card = null;
+        if (openLight) {
+            openLight.btn.setAttribute('aria-expanded', 'false');
+            openLight.btn.classList.remove('is-open');
+            if (returnFocus) openLight.btn.focus({ preventScroll: true });
+        }
+        openLight = null;
+    }
+
+    document.addEventListener('click', () => { if (openLight) closeCard(); });
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && openLight) closeCard(true);
+    });
+
+    if (speedInput) {
+        const applySpeed = () => {
+            const sp = SPEEDS[Number(speedInput.value)] || SPEEDS[2];
+            simSpeed = sp.m;
+            if (speedNote) speedNote.textContent = sp.label;
+            speedInput.setAttribute('aria-valuetext', sp.label);
+        };
+        speedInput.addEventListener('input', applySpeed);
+        applySpeed();
+        if (reduceMotion) speedInput.closest('.sim-speed').hidden = true;
     }
 
     if (pauseBtn) {

@@ -19,7 +19,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=18">
+    <link rel="stylesheet" href="style.css?v=21">
 </head>
 <body>
 
@@ -87,8 +87,17 @@
                     <!-- часы ускоренных суток -->
                     <div class="sim">
                         <p class="sim-time"><span class="sim-clock">--:--</span> <span class="sim-phase">день</span></p>
-                        <p class="sim-note">схема, сутки за 4 минуты</p>
                         <button class="sim-pause" type="button" aria-pressed="false">Пауза</button>
+                        <div class="sim-plan">
+                            <div class="sim-plan-bar" aria-hidden="true"><i class="sim-plan-now"></i></div>
+                            <div class="sim-plan-ticks" aria-hidden="true"><span>0</span><span>6</span><span>12</span><span>18</span><span>24</span></div>
+                            <p class="sim-plan-label">План светофоров: <b class="sim-plan-name">дневной</b></p>
+                        </div>
+                        <label class="sim-speed">
+                            <span>Скорость</span>
+                            <input class="sim-speed-input" type="range" min="0" max="4" step="1" value="2" aria-describedby="sim-note">
+                            <span class="sim-note" id="sim-note">сутки за 4 мин</span>
+                        </label>
                     </div>
                     <p>Три года делал ГИС управления транспортными потоками города. До этого делал редизайн сайта и калькуляторов Сбер Страхования.</p>
                     <div class="hero-actions">
@@ -338,6 +347,6 @@
         <p>© 2026 Сергей Щербаков</p>
     </footer>
 
-    <script src="script.js?v=12"></script>
+    <script src="script.js?v=14"></script>
 </body>
 </html>
