@@ -20,6 +20,35 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=38">
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=114486975', 'ym');
+
+        ym(114486975, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+
+        // цели: клики по контактам, PDF, резюме, RuStore и кейсам
+        document.addEventListener('click', function (e) {
+            var a = e.target.closest && e.target.closest('a');
+            if (!a) return;
+            var h = a.getAttribute('href') || '', g = null;
+            if (h.indexOf('t.me/') > -1) g = 'telegram';
+            else if (/\.pdf$/.test(h)) g = 'pdf';
+            else if (h.indexOf('hh.ru') > -1) g = 'hh';
+            else if (h.indexOf('mailto:') === 0) g = 'email';
+            else if (h.indexOf('tel:') === 0) g = 'phone';
+            else if (h.indexOf('rustore.ru') > -1) g = 'rustore';
+            else if (h.indexOf('figma.com') > -1) g = 'figma';
+            else if (/case-[a-z]+\.html/.test(h)) g = 'case';
+            if (g && window.ym) ym(114486975, 'reachGoal', g);
+        }, true);
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/114486975" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
 </head>
 <body>
 
