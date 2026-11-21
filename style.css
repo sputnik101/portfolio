@@ -2350,3 +2350,9 @@ body.bar-solid .menu-panel { box-shadow: 0 2px 8px rgba(27, 28, 37, 0.08); }
 @media (min-width: 901px) and (max-width: 1120px) {
     .wordmark { display: none; }
 }
+
+/* Зарубка: тёмная обложка в цвет приложения */
+.folder-zb .marker { background: #F06A40; }
+.folder-zb .folder-cover { background: #1C1B1A; }
+.folder-zb { --tint: #FBEDE7; --accent: #D9531F; }
+.folder-free .folder-body > .folder-link { margin-top: auto; }
