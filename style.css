@@ -2373,3 +2373,8 @@ body.bar-solid .menu-panel { box-shadow: 0 2px 8px rgba(27, 28, 37, 0.08); }
     .folder-zb .folder-body > .folder-result { margin-top: 0; }
     .folder-zb .folder-body > .folder-link { justify-self: start; align-self: start; }
 }
+
+/* строка про cookie в подвале */
+.cookie-note { flex-basis: 100%; font-size: 12px; color: var(--muted); opacity: 0.8; }
+.case-footer > p { margin: 0; }
+.case-footer { row-gap: 4px; align-items: center; }
