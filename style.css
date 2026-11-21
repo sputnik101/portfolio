@@ -1837,8 +1837,8 @@ body.is-scrolled .wordmark { opacity: 0; visibility: hidden; pointer-events: non
 
 /* пятая карточка (фриланс) на всю ширину сетки */
 @media (min-width: 1081px) {
-    .folders > .folder-free:last-child:nth-child(odd) { grid-column: 1 / -1; }
-    .folders > .folder-free:last-child:nth-child(odd) .folder-cover img {
+    .folders > .folder-free:last-child { grid-column: 1 / -1; }
+    .folders > .folder-free:last-child .folder-cover img {
         height: 260px;
         object-fit: contain;
     }
@@ -2356,3 +2356,20 @@ body.bar-solid .menu-panel { box-shadow: 0 2px 8px rgba(27, 28, 37, 0.08); }
 .folder-zb .folder-cover { background: #1C1B1A; }
 .folder-zb { --tint: #FBEDE7; --accent: #D9531F; }
 .folder-free .folder-body > .folder-link { margin-top: auto; }
+
+/* Зарубка — широкая карточка: обложка слева, текст справа */
+@media (min-width: 1081px) {
+    .folders > .folder-zb { grid-column: 1 / -1; }
+    .folder-zb .folder-body {
+        display: grid;
+        grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+        column-gap: 16px;
+        align-content: start;
+    }
+    .folder-zb .folder-body > .folder-cover { grid-column: 1; grid-row: 1 / span 5; margin-bottom: 0; align-self: stretch; position: relative; min-height: 280px; }
+    .folder-zb .folder-body > .folder-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .folder-zb .folder-body > :not(.folder-cover) { grid-column: 2; }
+    .folder-zb .folder-body > h3 { margin-top: 12px; }
+    .folder-zb .folder-body > .folder-result { margin-top: 0; }
+    .folder-zb .folder-body > .folder-link { justify-self: start; align-self: start; }
+}
